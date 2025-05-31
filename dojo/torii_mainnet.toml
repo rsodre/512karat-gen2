@@ -1,0 +1,19 @@
+#
+# torii config for profile [mainnet]
+#
+world_address = "0xeb59de33e9401040ed51ba6c0ce429d68a8cc3efba6f3b506a39d25de946f2"
+rpc = "https://api.cartridge.gg/x/starknet/mainnet"
+
+[events]
+raw = true
+
+[sql]
+historical = []
+
+[indexing]
+pending = true
+transactions = false
+# world_block = 722385    # Karat deployment block
+contracts = [
+  # "erc721:0x07d8ea58612a5de25f29281199a4fc1f2ce42f0f207f93c3a35280605f3b8e68", # 512karat
+]

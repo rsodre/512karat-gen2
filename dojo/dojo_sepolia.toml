@@ -1,0 +1,56 @@
+#--------------------------
+# dojo profile config
+# https://book.dojoengine.org/framework/config
+# https://github.com/dojoengine/dojo/blob/main/examples/simple/dojo_dev.toml
+#
+
+[world]
+name = "Karat Vol 2"
+description = "Generative Art made with Dojo."
+# icon_uri = "https://collect-code.com/assets/cc_logo/cc_logo1_red.png"
+icon_uri = "https://collect-code.com/assets/cc_logo/cc_logo1.png"
+cover_uri = "https://collect-code.com/tokens/KaratBanner1.png"
+website = "https://karat.collect-code.com"
+seed = "karat-v2"
+
+[world.socials]
+x = "https://x.com/matalecode"
+github = "https://github.com/rsodre"
+# discord = "https://discord.gg/FB2wR6uF"
+# telegram = "https://t.me/dojoengine"
+
+[env]
+chain_id = "SN_SEPOLIA"
+# rpc_url = "https://api.cartridge.gg/x/starknet/sepolia" # or env: STARKNET_RPC_URL
+# account_address = ""  # env: DOJO_ACCOUNT_ADDRESS
+# private_key = ""      # env: DOJO_PRIVATE_KEY
+world_address = "0xeb59de33e9401040ed51ba6c0ce429d68a8cc3efba6f3b506a39d25de946f2"
+# world_block = 799759    # Karat deployment block
+
+#--------------------------
+# namespaces
+#
+[namespace]
+default = "karat_v2"
+
+#--------------------------
+# namespaces
+#
+[owners]
+"karat_v2" = [
+  "karat_v2-main",
+]
+
+#--------------------------
+# writers
+#
+[writers]
+"karat_v2" = [
+  "karat_v2-main",
+]
+
+#--------------------------
+# init_calldata
+#
+[init_call_args]
+"karat_v2-main" = []

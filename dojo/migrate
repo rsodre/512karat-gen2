@@ -1,0 +1,70 @@
+#!/bin/bash
+set -e # enable exit on error
+source scripts/setup.sh
+
+if [[
+  -z "$PROJECT_NAME" ||
+  -z "$PROFILE" ||
+  -z "$MANIFEST_FILE_PATH" ||
+  "$RPC_URL" != "http"* ||
+  "$WORLD_ADDRESS" != "0x"* ||
+  -z "$WORLD_BLOCK"
+]]; then
+  echo "! Missing data 👎"
+  exit 1
+fi
+
+echo "BINDINGS_PATH: $BINDINGS_PATH"
+echo "SDK_GAME_PATH: $SDK_GAME_PATH"
+echo "SDK_MANIFEST_PATH: $SDK_MANIFEST_PATH"
+
+#-----------------
+# build
+#
+echo "------------------------------------------------------------------------------"
+sozo --version
+echo "------------------------------------------------------------------------------"
+echo ">>> Cleaning..."
+execute_command "sozo -P $PROFILE $ARG_OFFLINE clean"
+echo ">>> Building..."
+if [[ "$PROFILE" == "dev" ]]; then
+  execute_command "sozo -P $PROFILE $ARG_OFFLINE build $ARG_BINDINGS"
+else
+  execute_command "sozo -P $PROFILE $ARG_OFFLINE build"
+fi
+echo "👍"
+
+#-----------------
+# migrate
+#
+echo "------------------------------------------------------------------------------"
+echo ">>> Inspect migrations..."
+execute_command "sozo -P $PROFILE $ARG_OFFLINE inspect --world $WORLD_ADDRESS"
+
+if [[ -n "$ARG_INSPECT" ]]; then # if is set
+  echo "--- INSPECTED! 👍"
+  exit 0
+fi
+
+echo ">>> Do migrations..."
+# execute_command "sozo -P $PROFILE $ARG_OFFLINE migrate -vvv --world $WORLD_ADDRESS"
+execute_command "sozo -P $PROFILE $ARG_OFFLINE migrate --world $WORLD_ADDRESS $ARG_VERBOSE"
+echo "👍"
+
+
+#-----------------
+# auth write
+#
+# scripts/default_auth.sh $PROFILE
+
+#------------------------
+# copy manifest to client
+#
+# echo "------------------------------------------------------------------------------"
+# echo ">>> Copying manifest [$MANIFEST_FILE_PATH] to [$SDK_MANIFEST_PATH/]"
+# mkdir -p $SDK_MANIFEST_PATH
+# cp $MANIFEST_FILE_PATH $SDK_MANIFEST_PATH/
+# echo "👍"
+
+#------------------
+echo "--- DONE! 👍"

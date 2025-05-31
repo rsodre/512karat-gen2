@@ -1,0 +1,19 @@
+#
+# torii config for profile [sepolia]
+#
+world_address = "0xeb59de33e9401040ed51ba6c0ce429d68a8cc3efba6f3b506a39d25de946f2"
+rpc = "https://api.cartridge.gg/x/starknet/sepolia"
+
+[events]
+raw = true
+
+[sql]
+historical = []
+
+[indexing]
+pending = true
+transactions = false
+# world_block = 799759    # Karat deployment block
+contracts = [
+  # "erc721:0x05a2c005d0d50fcd19828cb0af4252a9dcd980d196676d441a200b1a0ed0b252", # 512karat
+]
