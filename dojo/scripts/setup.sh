@@ -102,7 +102,7 @@ export SDK_GAME_PATH="../sdk/src/games/$GAME_SLUG"
 export SDK_MANIFEST_PATH="$SDK_GAME_PATH/config/manifests"
 
 # contracts
-export MAIN_ADDRESS=$(get_contract_address "karat_v2-main")
+export MAIN_ADDRESS=$(get_contract_address "karat_v2-minter")
 
 # match rpc chain id with profile
 export CHAIN_ID=$(starkli chain-id --no-decode --rpc $RPC_URL | xxd -r -p)

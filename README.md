@@ -40,17 +40,6 @@ dojoup install v1.5.0
 After deployment, we can use some sozo commands to manage the contracts.
 
 ```sh
-# mint one token to the deployer account
-scripts/mint_to.sh mainnet
 # mint to a specific wallet
 scripts/mint_to.sh mainnet 0x04042b3F651F6d6Ff03b929437AdC30257333723970071b05cb0E2270C9dc385
-# change the currently amount of available to mint
-scripts/set_available.sh mainnet 128
 ```
-
-
-## Resources and Process
-
-This project sarted from scratch for [StarkHack 2024](https://ethglobal.com/events/starkhack), using a few open source boilerplates, mainly from [Dojo](https://www.dojoengine.org/), [Origami](https://book.dojoengine.org/toolchain/origami) and [Pistols at 10 Blocks](https://pistols.underware.gg/).
-
-The original submission, containing the full process of how it was built in June 2024 is on the [stark_hack](https://github.com/rsodre/512karat/tree/stark_hack) tag (**outdated!**).
