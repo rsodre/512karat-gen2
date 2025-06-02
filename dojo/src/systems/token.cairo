@@ -1,5 +1,6 @@
 use starknet::{ContractAddress};
 use dojo::world::IWorldDispatcher;
+// use karat_gen2::models::seed::{TokenData};
 
 #[starknet::interface]
 pub trait IToken<TState> {
@@ -51,6 +52,8 @@ pub trait IToken<TState> {
     // karat_gen2
     fn mint_next(ref self: TState, recipient: ContractAddress) -> u128;
     fn burn(ref self: TState, token_id: u256);
+    // fn get_token_data(self: @TState, token_id: u128) -> TokenData;
+    fn get_token_svg(ref self: TState, token_id: u128) -> ByteArray;
     fn set_paused(ref self: TState, is_paused: bool);
 }
 
@@ -58,6 +61,8 @@ pub trait IToken<TState> {
 pub trait ITokenPublic<TState> {
     fn mint_next(ref self: TState, recipient: ContractAddress) -> u128;
     fn burn(ref self: TState, token_id: u256);
+    // fn get_token_data(self: @TState, token_id: u128) -> TokenData;
+    fn get_token_svg(ref self: TState, token_id: u128) -> ByteArray;
     // admin
     fn set_paused(ref self: TState, is_paused: bool);
 }
@@ -74,6 +79,8 @@ pub mod token {
     use openzeppelin_token::erc721::ERC721Component;
     use nft_combo::erc721::erc721_combo::ERC721ComboComponent;
     use nft_combo::erc721::erc721_combo::ERC721ComboComponent::{ERC721HooksImpl};
+    use nft_combo::utils::renderer::{ContractMetadata, TokenMetadata};
+    use nft_combo::utils::encoder::{EncoderTrait};
     component!(path: SRC5Component, storage: src5, event: SRC5Event);
     component!(path: ERC721Component, storage: erc721, event: ERC721Event);
     component!(path: ERC721ComboComponent, storage: erc721_combo, event: ERC721ComboEvent);
@@ -105,7 +112,8 @@ pub mod token {
     //-----------------------------------
 
     use karat_gen2::models::token_config::{TokenConfig, TokenConfigTrait};
-    use karat_gen2::models::seed::{Seed, SeedTrait};
+    use karat_gen2::models::seed::{Seed, SeedTrait, TokenData};
+    use karat_gen2::systems::renderer::{RendererTrait};
     use karat_gen2::libs::store::{Store, StoreTrait};
     use karat_gen2::libs::dns::{SELECTORS};
     use karat_gen2::models::constants;
@@ -160,11 +168,28 @@ pub mod token {
 
             (token_id)
         }
+
         fn burn(ref self: ContractState, token_id: u256) {
             // self.erc721_burnable.burn(token_id);
             // event...
             // store.emit_token_burned_event(token_contract_address, token_id, owner);
         }
+
+        // fn get_token_data(self: @ContractState, token_id: u128) -> TokenData {
+        //     let mut store: Store = StoreTrait::new(self.world_default());
+        //     let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id);
+        //     (seed.get_token_data())
+        // }
+
+        fn get_token_svg(ref self: ContractState, token_id: u128) -> ByteArray {
+            let mut store: Store = StoreTrait::new(self.world_default());
+            let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id);
+            (RendererTrait::render_svg(@seed.get_token_data()))
+        }
+
+        //
+        // admin
+        //
         fn set_paused(ref self: ContractState, is_paused: bool) {
             let mut store: Store = StoreTrait::new(self.world_default());
             self._assert_caller_is_minter(@store);
@@ -194,9 +219,50 @@ pub mod token {
         }
     }
 
+
     //-----------------------------------
     // ERC721ComboHooksTrait
     //
     pub impl ERC721ComboHooksImpl of ERC721ComboComponent::ERC721ComboHooksTrait<ContractState> {
+        fn render_contract_uri(self: @ERC721ComboComponent::ComponentState<ContractState>) -> Option<ContractMetadata> {
+            // https://docs.opensea.io/docs/contract-level-metadata
+            let metadata = ContractMetadata {
+                name: self.name(),
+                symbol: self.symbol(),
+                description: constants::METADATA_DESCRIPTION(),
+                image: Option::Some(constants::CONTRACT_IMAGE()),
+                banner_image: Option::Some(constants::BANNER_IMAGE()),
+                featured_image: Option::None,
+                external_link: Option::Some(constants::EXTERNAL_LINK()),
+                collaborators: Option::None,
+            };
+            (Option::Some(metadata))
+        }
+
+        fn render_token_uri(self: @ERC721ComboComponent::ComponentState<ContractState>, token_id: u256) -> Option<TokenMetadata> {
+            let self = self.get_contract(); // get the component's contract state
+            let mut store: Store = StoreTrait::new(self.world_default());
+            // gather data
+            let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id.low);
+            let token_data: TokenData = seed.get_token_data();
+            let svg: ByteArray = RendererTrait::render_svg(@token_data);
+            // return the metadata to be rendered by the component
+            // https://docs.opensea.io/docs/metadata-standards#metadata-structure
+            let metadata = TokenMetadata {
+                token_id,
+                name: format!("Karat II #{}", token_id.low),
+                description: constants::METADATA_DESCRIPTION(),
+                image: Option::Some(EncoderTrait::encode_svg(svg, true)),
+                image_data: Option::None,
+                external_url: Option::Some(constants::EXTERNAL_LINK()), // TODO: format external token link
+                background_color: Option::Some("000000"),
+                animation_url: Option::None,
+                youtube_url: Option::None,
+                attributes: Option::Some(token_data.attributes),
+                additional_metadata: Option::None,
+            };
+            (Option::Some(metadata))
+        }
     }
+
 }

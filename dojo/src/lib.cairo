@@ -9,7 +9,6 @@ mod models {
     pub mod events;
     pub mod seed;
     pub mod token_config;
-    pub mod token_data;
 }
 mod interfaces {
     pub mod ierc20;

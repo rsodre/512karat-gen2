@@ -6,8 +6,6 @@ pub trait IMinter<TState> {
     fn can_mint(self: @TState, token_contract_address: ContractAddress) -> Option<ByteArray>;
     fn mint(ref self: TState, token_contract_address: ContractAddress) -> u128;
     fn mint_to(ref self: TState, token_contract_address: ContractAddress, recipient: ContractAddress) -> u128;
-    // fn get_token_data(self: @TState, token_id: u128) -> TokenData;
-    // fn get_token_svg(ref self: TState, token_id: u128) -> ByteArray;
 
     // admin
     fn set_paused(ref self: TState, token_contract_address: ContractAddress, is_paused: bool);
@@ -163,10 +161,6 @@ pub mod minter {
             let token_id: u128 = token_dispatcher.mint_next(recipient);
             (token_id)
         }
-
-        // fn get_token_data(self: @ContractState, token_id: u128) -> TokenData {
-        //     (TokenDataTrait::new(world, token_id))
-        // }
 
 
         //---------------------------------------

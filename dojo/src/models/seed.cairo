@@ -1,8 +1,8 @@
 use starknet::{ContractAddress};
 use karat_gen2::utils::hash::{make_seed};
-// use karat_gen2::{
-//     models::class::{Class, ClassTrait, CLASS_COUNT},
-// };
+use karat_gen2::{
+    models::class::{Class, ClassTrait},
+};
 
 #[dojo::model]
 #[derive(Copy, Drop, Serde)]
@@ -14,28 +14,61 @@ pub struct Seed {
     pub seed: felt252,
 }
 
+#[derive(Drop)]
+pub struct TokenData {
+    pub token_id: u128,
+    pub seed: u256,
+    pub class: Class,
+    pub realm_id: u128,
+    pub attributes: Span<Attribute>,
+}
+
+
+//---------------------------------------
+// Traits
+//
+use nft_combo::utils::renderer::{Attribute};
+
 #[generate_trait]
 pub impl SeedTraitImpl of SeedTrait {
     fn new(contract_address: ContractAddress, token_id: u128) -> Seed {
         let seed: felt252 = make_seed(contract_address, token_id);
         (Seed { contract_address, token_id, seed })
     }
-    // fn get_class(self: Seed) -> Class {
-    //     let s: u128 = (self.seed % CLASS_COUNT);
-    //     if (s == 0) { Class::A }
-    //     else if (s == 1) { Class::B }
-    //     else if (s == 2) { Class::C }
-    //     else if (s == 3) { Class::D }
-    //     else if (s == 4) { Class::E }
-    //     else if (s == 5) { Class::L }
-    //     else  { Class::A }
-    // }
-    // fn get_realm_id(self: Seed) -> felt252 {
-    //     ((self.seed % 8_000).into() + 1)
-    // }
+    fn get_class(self: @Seed) -> Class {
+        let seed: u256 = (*self.seed).into();
+        let s: u128 = (seed.low % ClassTrait::class_count());
+        (s.into())
+    }
+    fn get_realm_id(self: @Seed) -> u128 {
+        let seed: u256 = (*self.seed).into();
+        ((seed.low % 8_000) + 1)
+    }
+    //
+    // TokenData
+    //
+    fn get_token_data(self: @Seed) -> TokenData {
+        let class: Class = self.get_class();
+        let realm_id: u128 = self.get_realm_id();
+        let mut attributes: Span<Attribute> = array![
+            Attribute {
+                key: "Class",
+                value: class.name(),
+            },
+            Attribute {
+                key: "Realm",
+                value: format!("{}", realm_id),
+            },
+        ].span();
+        (TokenData{
+            token_id: *self.token_id,
+            seed: (*self.seed).into(),
+            class,
+            realm_id,
+            attributes,
+        })
+    }
 }
-
-
 
 
 
