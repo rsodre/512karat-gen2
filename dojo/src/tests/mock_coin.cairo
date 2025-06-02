@@ -62,7 +62,7 @@ pub mod mock_coin {
     // ERC-20 End
     //-----------------------------------
 
-    use karat_v2::utils::misc::{WEI};
+    use karat_gen2::utils::misc::{WEI};
 
 
     //*******************************************

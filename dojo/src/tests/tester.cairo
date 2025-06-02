@@ -12,13 +12,13 @@ pub mod tester {
         WorldStorageTestTrait,
     };
 
-    pub use karat_v2::systems::{
+    pub use karat_gen2::systems::{
         token::{ITokenDispatcher, ITokenDispatcherTrait},
         minter::{IMinterDispatcher, IMinterDispatcherTrait},
     };
-    pub use karat_v2::libs::store::{Store, StoreTrait};
-    pub use karat_v2::libs::dns::{DnsTrait};
-    pub use karat_v2::tests::{
+    pub use karat_gen2::libs::store::{Store, StoreTrait};
+    pub use karat_gen2::libs::dns::{DnsTrait};
+    pub use karat_gen2::tests::{
         mock_coin::{ICoinMockDispatcher, ICoinMockDispatcherTrait},
         mock_token::{IMockTokenDispatcher, IMockTokenDispatcherTrait},
     };
@@ -75,19 +75,19 @@ pub mod tester {
         
         let mut resources: Array<TestResource> = array![
             // contracts
-            TestResource::Contract(karat_v2::systems::token::token::TEST_CLASS_HASH),
-            TestResource::Contract(karat_v2::systems::minter::minter::TEST_CLASS_HASH),
-            TestResource::Contract(karat_v2::tests::mock_coin::mock_coin::TEST_CLASS_HASH),
-            TestResource::Contract(karat_v2::tests::mock_token::mock_token::TEST_CLASS_HASH),
+            TestResource::Contract(karat_gen2::systems::token::token::TEST_CLASS_HASH),
+            TestResource::Contract(karat_gen2::systems::minter::minter::TEST_CLASS_HASH),
+            TestResource::Contract(karat_gen2::tests::mock_coin::mock_coin::TEST_CLASS_HASH),
+            TestResource::Contract(karat_gen2::tests::mock_token::mock_token::TEST_CLASS_HASH),
             // models
-            TestResource::Model(karat_v2::models::token_config::m_TokenConfig::TEST_CLASS_HASH),
-            TestResource::Model(karat_v2::models::seed::m_Seed::TEST_CLASS_HASH),
+            TestResource::Model(karat_gen2::models::token_config::m_TokenConfig::TEST_CLASS_HASH),
+            TestResource::Model(karat_gen2::models::seed::m_Seed::TEST_CLASS_HASH),
             // events
-            TestResource::Event(karat_v2::models::events::e_TokenMintedEvent::TEST_CLASS_HASH),
+            TestResource::Event(karat_gen2::models::events::e_TokenMintedEvent::TEST_CLASS_HASH),
         ];
 
         let namespace_def = NamespaceDef {
-            namespace: "karat_v2",
+            namespace: "karat_gen2",
             resources: resources.span(),
         };
 
@@ -105,13 +105,13 @@ pub mod tester {
         let presale_token_address = world.find_contract_address(@"mock_token");
 
         let mut contract_defs: Array<ContractDef> = array![
-            ContractDefTrait::new(@"karat_v2", @"token")
-                .with_writer_of([dojo::utils::bytearray_hash(@"karat_v2")].span())
+            ContractDefTrait::new(@"karat_gen2", @"token")
+                .with_writer_of([dojo::utils::bytearray_hash(@"karat_gen2")].span())
                 .with_init_calldata([
                     TREASURY().into(),
                 ].span()),
-            ContractDefTrait::new(@"karat_v2", @"minter")
-                .with_writer_of([dojo::utils::bytearray_hash(@"karat_v2")].span())
+            ContractDefTrait::new(@"karat_gen2", @"minter")
+                .with_writer_of([dojo::utils::bytearray_hash(@"karat_gen2")].span())
                 .with_init_calldata([
                     TREASURY().into(),
                     (if strk_address.is_non_zero() {strk_address} else {XYZ()}).into(),
@@ -124,8 +124,8 @@ pub mod tester {
         testing::set_block_timestamp(INITIAL_TIMESTAMP);
 
         world.sync_perms_and_inits(contract_defs.span());
-        world.dispatcher.grant_owner(dojo::utils::bytearray_hash(@"karat_v2"), OWNER());
-        world.dispatcher.grant_owner(selector_from_tag!("karat_v2-minter"), OWNER());
+        world.dispatcher.grant_owner(dojo::utils::bytearray_hash(@"karat_gen2"), OWNER());
+        world.dispatcher.grant_owner(selector_from_tag!("karat_gen2-minter"), OWNER());
 
         impersonate(OWNER());
 

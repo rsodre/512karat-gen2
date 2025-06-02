@@ -11,7 +11,7 @@ description = "Generative Art made with Dojo."
 icon_uri = "https://collect-code.com/assets/cc_logo/cc_logo1.png"
 cover_uri = "https://collect-code.com/tokens/KaratBanner1.png"
 website = "https://karat.collect-code.com"
-seed = "karat-v2"
+seed = "karat-gen2"
 
 [world.socials]
 x = "https://x.com/matalecode"
@@ -31,34 +31,34 @@ world_address = "0xeb59de33e9401040ed51ba6c0ce429d68a8cc3efba6f3b506a39d25de946f
 # namespaces
 #
 [namespace]
-default = "karat_v2"
+default = "karat_gen2"
 
 #--------------------------
 # namespaces
 #
 [owners]
-"karat_v2" = [
-  "karat_v2-minter",
+"karat_gen2" = [
+  "karat_gen2-minter",
 ]
 
 #--------------------------
 # writers
 #
 [writers]
-"karat_v2" = [
-  "karat_v2-minter",
-  "karat_v2-token",
+"karat_gen2" = [
+  "karat_gen2-minter",
+  "karat_gen2-token",
 ]
 
 #--------------------------
 # init_calldata
 #
 [init_call_args]
-"karat_v2-minter" = [
+"karat_gen2-minter" = [
   "0x015aF5935c1CBd913B069973aB162c364a03eB6e3Ea311d50a06A8C2bA060AC8", # treasury_address
   "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d", # strk_address
   "0x07d8ea58612a5de25f29281199a4fc1f2ce42f0f207f93c3a35280605f3b8e68", # karat_address
 ]
-"karat_v2-token" = [
+"karat_gen2-token" = [
   "0x015aF5935c1CBd913B069973aB162c364a03eB6e3Ea311d50a06A8C2bA060AC8", # treasury_address
 ]

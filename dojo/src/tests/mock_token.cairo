@@ -10,13 +10,13 @@ pub trait IMockToken<TState> {
 pub mod mock_token {
     use starknet::{ContractAddress};
     use dojo::world::{WorldStorage};
-    use karat_v2::tests::tester::tester::{OWNER, OTHER, ZERO};
+    use karat_gen2::tests::tester::tester::{OWNER, OTHER, ZERO};
 
     #[generate_trait]
     impl WorldDefaultImpl of WorldDefaultTrait {
         #[inline(always)]
         fn world_default(self: @ContractState) -> WorldStorage {
-            (self.world(@"karat_v2"))
+            (self.world(@"karat_gen2"))
         }
     }
 

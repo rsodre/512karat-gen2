@@ -2,9 +2,9 @@
 //     use debug::PrintTrait;
 //     use core::byte_array::ByteArrayTrait;
 //     use core::array::{Array, ArrayTrait};
-//     use karat_v2::models::token_data::{TokenData, TokenDataTrait, ContractData};
-//     use karat_v2::models::class::{Class, ClassTrait};
-//     use karat_v2::utils::encoding::bytes_base64_encode;
+//     use karat_gen2::models::token_data::{TokenData, TokenDataTrait, ContractData};
+//     use karat_gen2::models::class::{Class, ClassTrait};
+//     use karat_gen2::utils::encoding::bytes_base64_encode;
 
 //     const RESOLUTION: usize = 1000;
 //     const GAP: usize = 4;

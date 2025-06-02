@@ -1,6 +1,6 @@
 use starknet::{ContractAddress};
-use karat_v2::utils::hash::{make_seed};
-// use karat_v2::{
+use karat_gen2::utils::hash::{make_seed};
+// use karat_gen2::{
 //     models::class::{Class, ClassTrait, CLASS_COUNT},
 // };
 
@@ -45,7 +45,7 @@ pub impl SeedTraitImpl of SeedTrait {
 #[cfg(test)]
 mod tests {
     use super::{Seed, SeedTrait};
-    use karat_v2::tests::tester::tester::{OWNER, OTHER};
+    use karat_gen2::tests::tester::tester::{OWNER, OTHER};
 
     #[test]
     fn test_seed_is_unique() {

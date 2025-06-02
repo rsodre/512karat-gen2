@@ -20,8 +20,8 @@ pub struct TokenConfig {
 // Traits
 //
 use core::num::traits::Zero;
-use karat_v2::interfaces::ierc721::{IERC721Dispatcher, IERC721DispatcherTrait};
-use karat_v2::interfaces::ierc20::{IERC20Dispatcher};
+use karat_gen2::interfaces::ierc721::{IERC721Dispatcher, IERC721DispatcherTrait};
+use karat_gen2::interfaces::ierc20::{IERC20Dispatcher};
 
 #[generate_trait]
 pub impl TokenConfigTraitImpl of TokenConfigTrait {

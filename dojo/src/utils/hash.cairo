@@ -2,7 +2,7 @@ use starknet::ContractAddress;
 use core::poseidon::{PoseidonTrait, HashState};
 use core::hash::HashStateTrait;
 
-// pub use karat_v2::utils::misc::{FeltToLossy};
+// pub use karat_gen2::utils::misc::{FeltToLossy};
 
 pub fn make_seed(contract_address: ContractAddress, token_id: u128) -> felt252 {
     (hash_values([

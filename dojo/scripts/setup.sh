@@ -89,7 +89,7 @@ execute_command () {
 #-----------------
 # env setup
 #
-export GAME_SLUG="karat_v2"
+export GAME_SLUG="karat_gen2"
 export PROJECT_NAME=$(toml get $DOJO_PROFILE_FILE --raw world.name)
 export WORLD_ADDRESS=$(get_profile_env "world_address")
 export WORLD_BLOCK=$(get_profile_env "world_block")
@@ -102,7 +102,7 @@ export SDK_GAME_PATH="../sdk/src/games/$GAME_SLUG"
 export SDK_MANIFEST_PATH="$SDK_GAME_PATH/config/manifests"
 
 # contracts
-export MAIN_ADDRESS=$(get_contract_address "karat_v2-minter")
+export MAIN_ADDRESS=$(get_contract_address "karat_gen2-minter")
 
 # match rpc chain id with profile
 export CHAIN_ID=$(starkli chain-id --no-decode --rpc $RPC_URL | xxd -r -p)

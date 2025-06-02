@@ -100,7 +100,7 @@
 // #[cfg(test)]
 // mod tests {
 //     use super::{Class, ClassTrait, CLASS_COUNT};
-//     use karat_v2::models::seed::{Seed, SeedTrait};
+//     use karat_gen2::models::seed::{Seed, SeedTrait};
 
 //     // #[test]
 //     // fn test_class_array_sizes() {

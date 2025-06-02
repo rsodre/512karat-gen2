@@ -3,7 +3,7 @@ use dojo::world::{WorldStorage};
 use dojo::model::{ModelStorage};
 use dojo::event::{EventStorage};
 
-pub use karat_v2::models::{
+pub use karat_gen2::models::{
     token_config::{TokenConfig},
     seed::{Seed},
     events::{TokenMintedEvent},

@@ -1,16 +1,16 @@
 use starknet::{ContractAddress};
 use dojo::world::{WorldStorage, WorldStorageTrait};
 
-pub use karat_v2::systems::{
+pub use karat_gen2::systems::{
     token::{ITokenDispatcher},
     minter::{IMinterDispatcher},
 };
-use karat_v2::utils::misc::{ZERO};
+use karat_gen2::utils::misc::{ZERO};
 
 pub mod SELECTORS {
     // systems
-    pub const TOKEN: felt252 = selector_from_tag!("karat_v2-token");
-    pub const MINTER: felt252 = selector_from_tag!("karat_v2-minter");
+    pub const TOKEN: felt252 = selector_from_tag!("karat_gen2-token");
+    pub const MINTER: felt252 = selector_from_tag!("karat_gen2-minter");
 }
 
 #[generate_trait]

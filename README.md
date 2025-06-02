@@ -1,4 +1,4 @@
-# 512 KARAT Vol 2
+# 512 KARAT Generation 2
 
 ## Generative Art made with Dojo
 

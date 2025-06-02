@@ -4,14 +4,14 @@ mod tests {
     // use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
     // karat
-    use karat_v2::{
+    use karat_gen2::{
         systems::{token::{ITokenDispatcherTrait}},
         systems::{minter::{IMinterDispatcherTrait}},
         // models::seed::{Seed, SeedTrait},
         models::{constants},
         utils::misc::{WEI},
     };
-    use karat_v2::tests::{
+    use karat_gen2::tests::{
         tester::{tester},
         tester::tester::{
             TestSystems, FLAGS,

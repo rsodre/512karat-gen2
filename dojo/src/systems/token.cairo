@@ -48,7 +48,7 @@ pub trait IToken<TState> {
     // IERC721ComboABI end
     //-----------------------------------
 
-    // karat_v2
+    // karat_gen2
     fn mint_next(ref self: TState, recipient: ContractAddress) -> u128;
     fn burn(ref self: TState, token_id: u256);
     fn set_paused(ref self: TState, is_paused: bool);
@@ -104,11 +104,11 @@ pub mod token {
     // ERC721 end
     //-----------------------------------
 
-    use karat_v2::models::token_config::{TokenConfig, TokenConfigTrait};
-    use karat_v2::models::seed::{Seed, SeedTrait};
-    use karat_v2::libs::store::{Store, StoreTrait};
-    use karat_v2::libs::dns::{SELECTORS};
-    use karat_v2::models::constants;
+    use karat_gen2::models::token_config::{TokenConfig, TokenConfigTrait};
+    use karat_gen2::models::seed::{Seed, SeedTrait};
+    use karat_gen2::libs::store::{Store, StoreTrait};
+    use karat_gen2::libs::dns::{SELECTORS};
+    use karat_gen2::models::constants;
 
     mod Errors {
         pub const CALLER_IS_NOT_OWNER: felt252      = 'KARAT: caller is not owner';
@@ -133,7 +133,7 @@ pub mod token {
     impl WorldDefaultImpl of WorldDefaultTrait {
         #[inline(always)]
         fn world_default(self: @ContractState) -> WorldStorage {
-            (self.world(@"karat_v2"))
+            (self.world(@"karat_gen2"))
         }
     }
 

@@ -1,5 +1,5 @@
 // use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-// use karat_v2::models::{
+// use karat_gen2::models::{
 //     seed::{Seed, SeedTrait},
 //     class::{Class, ClassTrait},
 //     constants::{CONST},

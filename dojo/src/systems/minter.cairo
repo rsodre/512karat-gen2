@@ -20,13 +20,13 @@ pub mod minter {
     use starknet::{ContractAddress};
     use dojo::world::{WorldStorage, IWorldDispatcherTrait};
 
-    use karat_v2::systems::token::{ITokenDispatcher, ITokenDispatcherTrait};
-    // use karat_v2::systems::renderer::{renderer};
-    use karat_v2::interfaces::ierc20::{IERC20Dispatcher, IERC20DispatcherTrait};
-    use karat_v2::libs::store::{Store, StoreTrait};
-    use karat_v2::libs::dns::{DnsTrait, SELECTORS};
-    use karat_v2::utils::misc::{CONST, WEI};
-    use karat_v2::models::{
+    use karat_gen2::systems::token::{ITokenDispatcher, ITokenDispatcherTrait};
+    // use karat_gen2::systems::renderer::{renderer};
+    use karat_gen2::interfaces::ierc20::{IERC20Dispatcher, IERC20DispatcherTrait};
+    use karat_gen2::libs::store::{Store, StoreTrait};
+    use karat_gen2::libs::dns::{DnsTrait, SELECTORS};
+    use karat_gen2::utils::misc::{CONST, WEI};
+    use karat_gen2::models::{
         token_config::{TokenConfig, TokenConfigTrait},
         constants,
     };
@@ -76,7 +76,7 @@ pub mod minter {
     impl WorldDefaultImpl of WorldDefaultTrait {
         #[inline(always)]
         fn world_default(self: @ContractState) -> WorldStorage {
-            (self.world(@"karat_v2"))
+            (self.world(@"karat_gen2"))
         }
     }
 
