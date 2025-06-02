@@ -105,32 +105,28 @@ pub mod token {
     //-----------------------------------
 
     use karat_v2::models::token_config::{TokenConfig, TokenConfigTrait};
+    use karat_v2::models::seed::{Seed, SeedTrait};
     use karat_v2::libs::store::{Store, StoreTrait};
     use karat_v2::libs::dns::{SELECTORS};
-    use karat_v2::models::seed::{Seed, SeedTrait};
+    use karat_v2::models::constants;
 
     mod Errors {
-        pub const CALLER_IS_NOT_OWNER: felt252      = 'KARAT-V2: caller is not owner';
-        pub const CALLER_IS_NOT_MINTER: felt252     = 'KARAT-V2: caller is not minter';
+        pub const CALLER_IS_NOT_OWNER: felt252      = 'KARAT: caller is not owner';
+        pub const CALLER_IS_NOT_MINTER: felt252     = 'KARAT: caller is not minter';
     }
-
-    //*******************************
-    fn TOKEN_NAME()   -> ByteArray {("Karat II")}
-    fn TOKEN_SYMBOL() -> ByteArray {("KARAT-G2")}
-    //*******************************
 
     fn dojo_init(ref self: ContractState,
         treasury_address: ContractAddress,
     ) {
         self.erc721_combo.initializer(
-            TOKEN_NAME(),
-            TOKEN_SYMBOL(),
+            constants::TOKEN_NAME(),
+            constants::TOKEN_SYMBOL(),
             Option::None, // use hooks
             Option::None, // use hooks
-            Option::Some(512),
+            Option::Some(constants::MAX_SUPPLY),
         );
-        self.erc721_combo._set_default_royalty(treasury_address, 500);
-        self.erc721_combo._set_minting_paused(true);
+        self.erc721_combo._set_default_royalty(treasury_address, constants::DEFAULT_ROYALTY);
+        // self.erc721_combo._set_minting_paused(true); // no need, using presale state
     }
 
     #[generate_trait]
@@ -166,6 +162,8 @@ pub mod token {
         }
         fn burn(ref self: ContractState, token_id: u256) {
             // self.erc721_burnable.burn(token_id);
+            // event...
+            // store.emit_token_burned_event(token_contract_address, token_id, owner);
         }
         fn set_paused(ref self: ContractState, is_paused: bool) {
             let mut store: Store = StoreTrait::new(self.world_default());

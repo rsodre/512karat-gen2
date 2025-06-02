@@ -16,7 +16,23 @@ pub struct TokenConfig {
     pub presale_timestamp_end: u64,
 }
 
+//---------------------------------------
+// Traits
+//
+use core::num::traits::Zero;
+use karat_v2::interfaces::ierc721::{IERC721Dispatcher, IERC721DispatcherTrait};
+use karat_v2::interfaces::ierc20::{IERC20Dispatcher};
+
 #[generate_trait]
 pub impl TokenConfigTraitImpl of TokenConfigTrait {
-    fn is_minter(self: TokenConfig, address: ContractAddress) -> bool { (self.minter_address == address) }
+    fn is_minter(self: TokenConfig, address: ContractAddress) -> bool {
+        (self.minter_address == address)
+    }
+    fn is_eligible_for_presale(self: TokenConfig, account_address: ContractAddress) -> bool {
+        let presale_dispatcher = IERC721Dispatcher{ contract_address: self.presale_token_address };
+        (presale_dispatcher.balance_of(account_address).is_non_zero())
+    }
+    fn purchase_coin_dispatcher(self: TokenConfig) -> IERC20Dispatcher {
+        (IERC20Dispatcher{ contract_address: self.purchase_coin_address })
+    }
 }

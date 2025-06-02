@@ -45,16 +45,23 @@ pub impl SeedTraitImpl of SeedTrait {
 #[cfg(test)]
 mod tests {
     use super::{Seed, SeedTrait};
+    use karat_v2::tests::tester::tester::{OWNER, OTHER};
 
     #[test]
-    #[available_gas(100000)]
     fn test_seed_is_unique() {
-        let seed_1 = SeedTrait::new(1);
-        let seed_2 = SeedTrait::new(2);
-        let seed_1b = SeedTrait::new(1);
-        assert(seed_1.seed > 0, 'seed_1');
-        assert(seed_2.seed > 0, 'seed_2');
-        assert(seed_1.seed != seed_2.seed, 'seed_1_2');
-        assert(seed_1.seed == seed_1b.seed, 'seed_1_1');
+        let seed_A_1: Seed = SeedTrait::new(OWNER(), 1);
+        let seed_A_2: Seed = SeedTrait::new(OWNER(), 2);
+        let seed_A_1b: Seed = SeedTrait::new(OWNER(), 1);
+        assert_gt!(seed_A_1.seed.into(), 0_u256, "seed_A_1");
+        assert_gt!(seed_A_2.seed.into(), 0_u256, "seed_A_2");
+        assert_ne!(seed_A_1.seed, seed_A_2.seed, "seed_A_1 <> seed_A_2");
+        assert_eq!(seed_A_1.seed, seed_A_1b.seed, "seed_A_1 == seed_A_1b");
+        let seed_B_1 = SeedTrait::new(OTHER(), 1);
+        let seed_B_2 = SeedTrait::new(OTHER(), 2);
+        assert_gt!(seed_B_1.seed.into(), 0_u256, "seed_B_1");
+        assert_gt!(seed_B_2.seed.into(), 0_u256, "seed_B_2");
+        assert_ne!(seed_B_1.seed, seed_B_2.seed, "seed_B_1 <> seed_B_2");
+        assert_ne!(seed_B_1.seed, seed_A_1.seed, "seed_B_1 <> seed_A_1");
+        assert_ne!(seed_B_2.seed, seed_A_2.seed, "seed_B_2 <> seed_A_2");
     }
 }

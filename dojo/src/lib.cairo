@@ -26,6 +26,9 @@ mod utils {
 
 #[cfg(test)]
 mod tests {
-    pub mod test_main;
     pub mod tester;
+    pub mod test_token;
+    pub mod test_minter;
+    pub mod mock_coin;
+    pub mod mock_token;
 }

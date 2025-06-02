@@ -103,7 +103,6 @@
 //     use karat_v2::models::seed::{Seed, SeedTrait};
 
 //     // #[test]
-//     // #[available_gas(100_000_000)]
 //     // fn test_class_array_sizes() {
 //     //     let mut c: u128 = 0;
 //     //     loop {
@@ -112,7 +111,7 @@
 //     //         }
 //     //         let seed: Seed = Seed{ token_id:1, seed:(0x57237+c) };
 //     //         let class: Class = seed.get_class();
-//     //         assert(class.get_char_set().len() == CHAR_COUNT, 'not char len');
+//     //         assert!(class.get_char_set().len() == CHAR_COUNT, 'not char len');
 //     //         c += 1;
 //     //     };
 //     // }
