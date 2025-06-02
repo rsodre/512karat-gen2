@@ -170,9 +170,11 @@ pub mod token {
         }
 
         fn burn(ref self: ContractState, token_id: u256) {
-            // self.erc721_burnable.burn(token_id);
-            // event...
-            // store.emit_token_burned_event(token_contract_address, token_id, owner);
+            // let owner: ContractAddress = self.owner_of(token_id);
+            // self.erc721_combo._burn(token_id);
+            // // event...
+            // let mut store: Store = StoreTrait::new(self.world_default());
+            // store.emit_token_burned_event(starknet::get_contract_address(), token_id.low, owner);
         }
 
         // fn get_token_data(self: @ContractState, token_id: u128) -> TokenData {

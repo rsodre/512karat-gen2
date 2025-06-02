@@ -6,7 +6,7 @@ use dojo::event::{EventStorage};
 pub use karat_gen2::models::{
     token_config::{TokenConfig},
     seed::{Seed},
-    events::{TokenMintedEvent},
+    events::{TokenMintedEvent, TokenBurnedEvent},
 };
 
 
@@ -60,6 +60,14 @@ pub impl StoreImpl of StoreTrait {
             token_id,
             recipient,
             seed,
+        });
+    }
+    #[inline(always)]
+    fn emit_token_burned_event(ref self: Store, token_contract_address: ContractAddress, token_id: u128, owner: ContractAddress) {
+        self.world.emit_event(@TokenBurnedEvent{
+            token_contract_address,
+            token_id,
+            owner,
         });
     }
 }
