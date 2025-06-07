@@ -1,71 +1,69 @@
 use core::byte_array::ByteArrayTrait;
 use core::array::{Array, ArrayTrait};
-use karat_gen2::models::gen2::{
-    props::{Gen2Props},
-    class::{ClassTrait},
+use karat_gen2::models::{
+    seed::{Seeder, SeederTrait},
+    gen2::{
+        props::{Gen2Props},
+        class::{ClassTrait},
+    },
 };
+use karat_gen2::utils::misc::{safe_sub};
 
-const RESOLUTION: usize = 1000;
-const GAP: usize = 4;
-// // 48 x 48
-// const SIZE: usize = 48;
-// const SCALED_SIZE: usize = 29;
-// 40 x 40
-const SIZE: usize = 40;
-const SCALED_SIZE: usize = 24;
-// 36 x 36
-// const SIZE: usize = 36;
-// const SCALED_SIZE: usize = 21;
-// // 32 x 32
-// const SIZE: usize = 32;
-// const SCALED_SIZE: usize = 19;
-// // 28 x 28
-// const SIZE: usize = 28;
-// const SCALED_SIZE: usize = 17;
-// // 24 x 24
-// const SIZE: usize = 24;
-// const SCALED_SIZE: usize = 14;
-
+const GAP: usize = 6;
+const WIDTH: usize = (12 * 3);
+const HEIGHT: usize = (12 * 4);
 
 #[generate_trait]
-pub impl KaratGen2RendererImpl of KaratGen2RendererTrait {
+pub impl Gen2RendererImpl of Gen2RendererTrait {
 
     //------------------------
     // SVG builder
     //
     fn render_svg(token_props: @Gen2Props) -> ByteArray {
+        //---------------------------
+        // get props
+        //
+        let font_name: ByteArray = token_props.class.font_name();
+        let char_set: Span<felt252> = token_props.class.get_char_set();
+        let char_set_lengths: Span<usize> = token_props.class.get_char_set_lengths();
+        let (text_length, text_scale): (usize, ByteArray) = token_props.class.get_text_size();
+        //---------------------------
+        // Build SVG
+        //
         let mut result: ByteArray = "";
-        let _WIDTH: usize = (GAP + SIZE + GAP);
+        let _WIDTH: usize = (GAP + WIDTH + GAP);
+        let _HEIGHT: usize = (GAP + HEIGHT + GAP);
+        let RES_X: usize = _WIDTH * 20;     // 960
+        let RES_Y: usize = _HEIGHT * 20;    // 1200
         result.append(@format!(
             "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" width=\"{}\" height=\"{}\" viewBox=\"-{} -{} {} {}\">",
-                RESOLUTION,
-                RESOLUTION,
+                RES_X,
+                RES_Y,
                 GAP,
                 GAP,
                 _WIDTH,
-                _WIDTH,
+                _HEIGHT,
         ));
-        result.append(@"<style>.BG{fill:#00000b;}.NORMAL{letter-spacing:0;}.SCALED{transform:scaleX(1.667);}text{fill:#c2e0fd;font-size:1px;font-family:'Courier New',monospace;dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}</style>");
-        let class_name: ByteArray = if (token_props.class.is_scaled()) {"SCALED"} else {"NORMAL"};
         result.append(@format!(
-            "<g><rect class=\"BG\" x=\"-{}\" y=\"-{}\" width=\"{}\" height=\"{}\" /><g class=\"{}\">",
+            "<style>.BG{{fill:#00000b;}}text{{letter-spacing:0;transform:scaleX({});fill:#c2e0fd;font-size:1px;font-family:'{}';dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}}</style>",
+                text_scale,
+                font_name,
+        ));
+        result.append(@format!(
+            "<g><rect class=\"BG\" x=\"-{}\" y=\"-{}\" width=\"{}\" height=\"{}\" /><g>",
                 GAP,
                 GAP,
                 _WIDTH,
-                _WIDTH,
-                class_name,
+                _HEIGHT,
         ));
         //---------------------------
         // Build text tags
         //
-        let text_length: usize = if (token_props.class.is_scaled()) {SCALED_SIZE} else {SIZE};
-        let char_set: Span<felt252> = token_props.class.get_char_set();
-        let char_set_sizes: Span<usize> = token_props.class.get_char_set_sizes();
         let char_count: usize = char_set.len();
-        let cells: Span<usize> = Self::_make_cells(*token_props.seed.low, char_count);
+        let cells: Span<usize> = Self::_make_cells(*token_props.seed, char_count);
         let mut y: usize = 0;
         loop {
-            if (y == SIZE) { break; }
+            if (y == HEIGHT) { break; }
             // open <text>
             result.append(@format!(
                 "<text y=\"{}\" textLength=\"{}\">",
@@ -74,9 +72,9 @@ pub impl KaratGen2RendererImpl of KaratGen2RendererTrait {
             ));
             let mut x: usize = 0;
             loop {
-                if (x == SIZE) { break; }
-                let value: @usize = cells.at(y * SIZE + x);
-                result.append_word(*char_set.at(*value), *char_set_sizes.at(*value));
+                if (x == WIDTH) { break; }
+                let value: @usize = cells.at(y * WIDTH + x);
+                result.append_word(*char_set.at(*value), *char_set_lengths.at(*value));
                 x += 1;
             };
             // close <text>
@@ -94,53 +92,57 @@ pub impl KaratGen2RendererImpl of KaratGen2RendererTrait {
     //------------------------
     // token cell builder
     //
-    fn _make_cells(seed: u128, char_count: usize) -> Span<usize> {
+    fn _make_cells(seed: u256, char_count: usize) -> Span<usize> {
+        let mut seeder: Seeder = SeederTrait::new(seed);
         // seed params
-        let HALF_SIZE: usize = (SIZE / 2);
-        let off_x: usize = ((seed / 0x100) % HALF_SIZE.into()).try_into().unwrap();
-        let off_y: usize = ((seed / 0x10000) % HALF_SIZE.into()).try_into().unwrap();
-        let sc_x: usize = ((seed / 0x1000000) % HALF_SIZE.into()).try_into().unwrap();
-        let sc_y = sc_x * ((seed / 0x100000000) % 3).try_into().unwrap();
-        let mod_x: usize = 1 + ((seed / 0x10000000000) % char_count.into()).try_into().unwrap();
-        let mod_y: usize = 1 + ((seed / 0x1000000000000) % char_count.into()).try_into().unwrap();
-        let fade_type: usize = ((seed / 0x100000000000000) % 10).try_into().unwrap();
-        let fade_amount: usize = 1 + ((seed / 0x10000000000000000) % 3).try_into().unwrap();
+        let HALF_W: usize = (WIDTH / 2);
+        let HALF_H: usize = (HEIGHT / 2);
+        let sc_x: usize = seeder.get_next(HALF_W);
+        let sc_y = sc_x * seeder.get_next(3);
+        let off_x: usize = seeder.get_next(HALF_W);
+        let off_y: usize = seeder.get_next(HALF_H);
+        let mod_x: usize = 1 + seeder.get_next(char_count);
+        let mod_y: usize = 1 + seeder.get_next(char_count);
+        let fade_type: usize = seeder.get_next(6);
+        let fade_amount: usize = 1 + seeder.get_next(4);
         // build cells
         let mut cells:Array<usize> = array![];
         let mut y: usize = 0;
         loop {
-            if (y == SIZE) { break; }
+            if (y == HEIGHT) { break; }
+            let norm_y: usize = if (y < HALF_H) {y} else {HEIGHT - y};
             let mut x: usize = 0;
             loop {
-                if (x == SIZE) { break; }
+                if (x == WIDTH) { break; }
+                let norm_x: usize = if (x < HALF_W) {x} else {WIDTH - x};
                 let mut value: usize = 0;
 
-                if (x < HALF_SIZE && y < HALF_SIZE) {
-                    // generate Q1
+                if (x < HALF_W) {
+                    // generate LEFT
                     value = (
                         (x * sc_x) + off_x + (x % mod_x) +
                         (y * sc_y) + off_y + (y % mod_y)
                     ) % char_count;
                     // fade out borders
                     let mut f: usize = 0;
-                    if ((x + y) < HALF_SIZE) {
-                        if (fade_type >= 1 && fade_type <= 3) { // inverted border
-                            f = (x + y) / fade_amount;
-                        } else { // normal
-                            f = ((HALF_SIZE-x) + (HALF_SIZE-y) - HALF_SIZE) / fade_amount;
-                        }
-                    } else if (fade_type == 0) { // inside-out
-                        f = (x + y - HALF_SIZE) / fade_amount;
+                    if (fade_type == 1 && (x + norm_y) > HALF_H) { // inside-out
+                        let fy = (norm_y - HALF_H);
+                        f = ((x + fy) / fade_amount);
+                    } else if (fade_type == 2 && (x + norm_y) < HALF_H) { // inverted border
+                        f = ((x + norm_y) / fade_amount) * 2;
+                    } else if (fade_type == 3 ) { // top/bottom v2
+                        f = (safe_sub(HALF_H, norm_y) / fade_amount);
+                    } else if (fade_type == 4 ) { // top/bottom
+                        f = (safe_sub(norm_y, HALF_H) / fade_amount);
+                    } else if (fade_type == 5 ) { // sides
+                        f = (safe_sub(HALF_W, norm_x) / fade_amount);
                     }
                     if (f > 0) {
-                        value -= if (f > value) {value} else {f};
+                        value = safe_sub(value, f);
                     }
-                } else if (y < HALF_SIZE) {
-                    // mirror Q2
-                    value = *cells.at(y*SIZE + (SIZE-x-1));
                 } else {
-                    // mirror Q3/Q4121
-                    value = *cells.at((SIZE-y-1)*SIZE + x);
+                    // mirror LEFT>RIGHT
+                    value = *cells.at(y*WIDTH + (WIDTH-x-1));
                 }
                 cells.append(value);
                 x += 1;
@@ -149,6 +151,44 @@ pub impl KaratGen2RendererImpl of KaratGen2RendererTrait {
         };
         (cells.span())
     }
-
 }
 
+
+
+//----------------------------
+// tests
+//
+#[cfg(test)]
+mod unit {
+    use super::{Gen2RendererTrait};
+    use karat_gen2::models::gen2::{
+        props::{Gen2Props},
+        class::{Class, ClassTrait},
+    };
+    use karat_gen2::utils::hash::{make_seed};
+    use karat_gen2::tests::tester::tester::{OWNER};
+
+    fn _name_class_props(class: Class, token_id: u128) -> Gen2Props {
+        (Gen2Props {
+            token_id,
+            seed: make_seed(OWNER(), token_id).into(),
+            class,
+            realm_id: token_id,
+            attributes: [].span(),
+        })
+    }
+
+    #[test]
+    fn test_class_svgs() {
+        let mut i: u128 = 0;
+        loop {
+            let class: Class = i.into();
+            if (class == Class::Count) { break; }
+            let props = _name_class_props(class, i+1);
+            let svg = Gen2RendererTrait::render_svg(@props);
+            println!("____SVG[{}][{}]:{}", i, class.name(), svg);
+            i += 1;
+        }
+    }
+
+}

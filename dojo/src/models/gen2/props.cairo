@@ -18,7 +18,7 @@ use nft_combo::utils::renderer::{Attribute};
 use karat_gen2::models::seed::{Seed};
 
 #[generate_trait]
-pub impl Gen2PropsTraitImpl of Gen2PropsTrait {
+pub impl Gen2PropsImpl of Gen2PropsTrait {
     fn get_class(self: @Seed) -> Class {
         let seed: u256 = (*self.seed).into();
         let s: u128 = (seed.low % ClassTrait::class_count());

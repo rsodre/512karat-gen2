@@ -111,7 +111,7 @@ pub mod token {
     use karat_gen2::models::token_config::{TokenConfig, TokenConfigTrait};
     use karat_gen2::models::seed::{Seed, SeedTrait};
     use karat_gen2::models::gen2::props::{Gen2Props, Gen2PropsTrait};
-    use karat_gen2::systems::renderer::{KaratGen2RendererTrait};
+    use karat_gen2::systems::renderer::{Gen2RendererTrait};
     use karat_gen2::libs::store::{Store, StoreTrait};
     use karat_gen2::libs::dns::{SELECTORS};
     use karat_gen2::models::gen2::{constants};
@@ -184,7 +184,7 @@ pub mod token {
         fn get_token_svg(ref self: ContractState, token_id: u128) -> ByteArray {
             let mut store: Store = StoreTrait::new(self.world_default());
             let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id);
-            (KaratGen2RendererTrait::render_svg(@seed.get_gen2_props()))
+            (Gen2RendererTrait::render_svg(@seed.get_gen2_props()))
         }
 
         //
@@ -245,7 +245,7 @@ pub mod token {
             // gather data
             let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id.low);
             let token_props: Gen2Props = seed.get_gen2_props();
-            let svg: ByteArray = KaratGen2RendererTrait::render_svg(@token_props);
+            let svg: ByteArray = Gen2RendererTrait::render_svg(@token_props);
             // return the metadata to be rendered by the component
             // https://docs.opensea.io/docs/metadata-standards#metadata-structure
             let metadata = TokenMetadata {

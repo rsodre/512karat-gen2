@@ -16,10 +16,32 @@ pub struct Seed {
 //
 
 #[generate_trait]
-pub impl SeedTraitImpl of SeedTrait {
+pub impl SeedImpl of SeedTrait {
     fn new(contract_address: ContractAddress, token_id: u128) -> Seed {
         let seed: felt252 = make_seed(contract_address, token_id);
         (Seed { contract_address, token_id, seed })
+    }
+}
+
+#[derive(Copy, Drop, Serde)]
+pub struct Seeder {
+    pub seed: u256,
+    pub count: usize,
+}
+
+#[generate_trait]
+pub impl SeederImpl of SeederTrait {
+    fn new(seed: u256) -> Seeder {
+        (Seeder {
+            seed,
+            count: 0,
+        })
+    }
+    fn get_next(ref self: Seeder, max_exclusive: usize) -> usize {
+        let result: u256 = ((self.seed & 0xff) % max_exclusive.into());
+        self.count += 1;
+        self.seed /= 0x100;
+        (result.try_into().unwrap())
     }
 }
 
@@ -29,8 +51,8 @@ pub impl SeedTraitImpl of SeedTrait {
 // tests
 //
 #[cfg(test)]
-mod tests {
-    use super::{Seed, SeedTrait};
+mod unit {
+    use super::{Seed, SeedTrait, Seeder, SeederTrait};
     use karat_gen2::tests::tester::tester::{OWNER, OTHER};
 
     #[test]
@@ -49,5 +71,36 @@ mod tests {
         assert_ne!(seed_B_1.seed, seed_B_2.seed, "seed_B_1 <> seed_B_2");
         assert_ne!(seed_B_1.seed, seed_A_1.seed, "seed_B_1 <> seed_A_1");
         assert_ne!(seed_B_2.seed, seed_A_2.seed, "seed_B_2 <> seed_A_2");
+    }
+
+    #[test]
+    fn test_seeder() {
+        let seed: u256 = 0x060504030201;
+        let mut seeder: Seeder = SeederTrait::new(seed);
+        assert_eq!(seeder.seed, seed.into(), "seed.seed_init");
+        assert_eq!(seeder.count, 0, "seeder.count_init");
+        assert_eq!(seeder.get_next(10), 1, "seeder.get_next(10)_1");
+        assert_eq!(seeder.count, 1, "seeder.count(1)");
+        assert_eq!(seeder.get_next(10), 2, "seeder.get_next(10)_2");
+        assert_eq!(seeder.count, 2, "seeder.count(1)");
+        assert_eq!(seeder.get_next(10), 3, "seeder.get_next(10)_3");
+        assert_eq!(seeder.count, 3, "seeder.count(1)");
+        assert_eq!(seeder.get_next(10), 4, "seeder.get_next(10)_4");
+        assert_eq!(seeder.count, 4, "seeder.count(1)");
+        assert_eq!(seeder.get_next(10), 5, "seeder.get_next(10)_5");
+        assert_eq!(seeder.count, 5, "seeder.count(1)");
+        assert_eq!(seeder.get_next(10), 6, "seeder.get_next(10)_6");
+        assert_eq!(seeder.count, 6, "seeder.count(1)");
+        assert_eq!(seeder.get_next(10), 0, "seeder.get_next(10)_7");
+        assert_eq!(seeder.count, 7, "seeder.count(1)");
+        // test mods
+        let mut seeder: Seeder = SeederTrait::new(seed);
+        assert_eq!(seeder.get_next(3), 1, "seeder.get_next(3)_1");
+        assert_eq!(seeder.get_next(3), 2, "seeder.get_next(3)_2");
+        assert_eq!(seeder.get_next(3), 0, "seeder.get_next(3)_3");
+        assert_eq!(seeder.get_next(3), 1, "seeder.get_next(3)_4");
+        assert_eq!(seeder.get_next(3), 2, "seeder.get_next(3)_5");
+        assert_eq!(seeder.get_next(3), 0, "seeder.get_next(3)_6");
+        assert_eq!(seeder.get_next(3), 0, "seeder.get_next(3)_7");
     }
 }

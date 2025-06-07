@@ -15,3 +15,7 @@ pub fn WEI(value: u128) -> u128 {
 pub fn ETH(value: u128) -> u128 {
     (value / CONST::ETH_TO_WEI.low)
 }
+
+pub fn safe_sub(a: usize, b: usize) -> usize {
+    if (a <= b) {(0)} else {(a - b)}
+}
