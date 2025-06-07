@@ -9,7 +9,7 @@ mod tests {
         systems::{token::{ITokenDispatcherTrait}},
         models::token_config::{TokenConfig},
         models::seed::{Seed,},
-        models::{constants},
+        models::gen2::{constants},
         utils::misc::{WEI},
     };
 

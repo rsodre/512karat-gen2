@@ -4,11 +4,14 @@ mod systems {
     pub mod renderer;
 }
 mod models {
-    pub mod class;
-    pub mod constants;
     pub mod events;
     pub mod seed;
     pub mod token_config;
+    pub mod gen2 {
+        pub mod class;
+        pub mod constants;
+        pub mod props;
+    }
 }
 mod interfaces {
     pub mod ierc20;

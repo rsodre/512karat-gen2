@@ -1,6 +1,5 @@
 use starknet::{ContractAddress};
 use dojo::world::IWorldDispatcher;
-// use karat_gen2::models::seed::{TokenData};
 
 #[starknet::interface]
 pub trait IToken<TState> {
@@ -52,7 +51,6 @@ pub trait IToken<TState> {
     // karat_gen2
     fn mint_next(ref self: TState, recipient: ContractAddress) -> u128;
     fn burn(ref self: TState, token_id: u256);
-    // fn get_token_data(self: @TState, token_id: u128) -> TokenData;
     fn get_token_svg(ref self: TState, token_id: u128) -> ByteArray;
     fn set_paused(ref self: TState, is_paused: bool);
 }
@@ -61,7 +59,6 @@ pub trait IToken<TState> {
 pub trait ITokenPublic<TState> {
     fn mint_next(ref self: TState, recipient: ContractAddress) -> u128;
     fn burn(ref self: TState, token_id: u256);
-    // fn get_token_data(self: @TState, token_id: u128) -> TokenData;
     fn get_token_svg(ref self: TState, token_id: u128) -> ByteArray;
     // admin
     fn set_paused(ref self: TState, is_paused: bool);
@@ -112,11 +109,12 @@ pub mod token {
     //-----------------------------------
 
     use karat_gen2::models::token_config::{TokenConfig, TokenConfigTrait};
-    use karat_gen2::models::seed::{Seed, SeedTrait, TokenData};
-    use karat_gen2::systems::renderer::{RendererTrait};
+    use karat_gen2::models::seed::{Seed, SeedTrait};
+    use karat_gen2::models::gen2::props::{Gen2Props, Gen2PropsTrait};
+    use karat_gen2::systems::renderer::{KaratGen2RendererTrait};
     use karat_gen2::libs::store::{Store, StoreTrait};
     use karat_gen2::libs::dns::{SELECTORS};
-    use karat_gen2::models::constants;
+    use karat_gen2::models::gen2::{constants};
 
     mod Errors {
         pub const CALLER_IS_NOT_OWNER: felt252      = 'KARAT: caller is not owner';
@@ -177,16 +175,16 @@ pub mod token {
             // store.emit_token_burned_event(starknet::get_contract_address(), token_id.low, owner);
         }
 
-        // fn get_token_data(self: @ContractState, token_id: u128) -> TokenData {
+        // fn get_token_props(self: @ContractState, token_id: u128) -> Gen2Props {
         //     let mut store: Store = StoreTrait::new(self.world_default());
         //     let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id);
-        //     (seed.get_token_data())
+        //     (seed.get_gen2_props())
         // }
 
         fn get_token_svg(ref self: ContractState, token_id: u128) -> ByteArray {
             let mut store: Store = StoreTrait::new(self.world_default());
             let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id);
-            (RendererTrait::render_svg(@seed.get_token_data()))
+            (KaratGen2RendererTrait::render_svg(@seed.get_gen2_props()))
         }
 
         //
@@ -246,8 +244,8 @@ pub mod token {
             let mut store: Store = StoreTrait::new(self.world_default());
             // gather data
             let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id.low);
-            let token_data: TokenData = seed.get_token_data();
-            let svg: ByteArray = RendererTrait::render_svg(@token_data);
+            let token_props: Gen2Props = seed.get_gen2_props();
+            let svg: ByteArray = KaratGen2RendererTrait::render_svg(@token_props);
             // return the metadata to be rendered by the component
             // https://docs.opensea.io/docs/metadata-standards#metadata-structure
             let metadata = TokenMetadata {
@@ -260,7 +258,7 @@ pub mod token {
                 background_color: Option::Some("000000"),
                 animation_url: Option::None,
                 youtube_url: Option::None,
-                attributes: Option::Some(token_data.attributes),
+                attributes: Option::Some(token_props.attributes),
                 additional_metadata: Option::None,
             };
             (Option::Some(metadata))

@@ -7,8 +7,7 @@ mod tests {
     use karat_gen2::{
         systems::{token::{ITokenDispatcherTrait}},
         systems::{minter::{IMinterDispatcherTrait}},
-        // models::seed::{Seed, SeedTrait},
-        models::{constants},
+        models::gen2::{constants},
         utils::misc::{WEI},
     };
     use karat_gen2::tests::{

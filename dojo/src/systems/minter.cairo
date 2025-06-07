@@ -26,7 +26,7 @@ pub mod minter {
     use karat_gen2::utils::misc::{CONST, WEI};
     use karat_gen2::models::{
         token_config::{TokenConfig, TokenConfigTrait},
-        constants,
+        gen2::{constants},
     };
 
     mod Errors {

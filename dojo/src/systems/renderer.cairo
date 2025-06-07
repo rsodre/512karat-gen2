@@ -1,7 +1,9 @@
 use core::byte_array::ByteArrayTrait;
 use core::array::{Array, ArrayTrait};
-use karat_gen2::models::seed::{TokenData};
-use karat_gen2::models::class::{ClassTrait};
+use karat_gen2::models::gen2::{
+    props::{Gen2Props},
+    class::{ClassTrait},
+};
 
 const RESOLUTION: usize = 1000;
 const GAP: usize = 4;
@@ -26,12 +28,12 @@ const SCALED_SIZE: usize = 24;
 
 
 #[generate_trait]
-pub impl RendererTraitImpl of RendererTrait {
+pub impl KaratGen2RendererImpl of KaratGen2RendererTrait {
 
     //------------------------
     // SVG builder
     //
-    fn render_svg(token_data: @TokenData) -> ByteArray {
+    fn render_svg(token_props: @Gen2Props) -> ByteArray {
         let mut result: ByteArray = "";
         let _WIDTH: usize = (GAP + SIZE + GAP);
         result.append(@format!(
@@ -44,7 +46,7 @@ pub impl RendererTraitImpl of RendererTrait {
                 _WIDTH,
         ));
         result.append(@"<style>.BG{fill:#00000b;}.NORMAL{letter-spacing:0;}.SCALED{transform:scaleX(1.667);}text{fill:#c2e0fd;font-size:1px;font-family:'Courier New',monospace;dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}</style>");
-        let class_name: ByteArray = if (token_data.class.is_scaled()) {"SCALED"} else {"NORMAL"};
+        let class_name: ByteArray = if (token_props.class.is_scaled()) {"SCALED"} else {"NORMAL"};
         result.append(@format!(
             "<g><rect class=\"BG\" x=\"-{}\" y=\"-{}\" width=\"{}\" height=\"{}\" /><g class=\"{}\">",
                 GAP,
@@ -56,11 +58,11 @@ pub impl RendererTraitImpl of RendererTrait {
         //---------------------------
         // Build text tags
         //
-        let text_length: usize = if (token_data.class.is_scaled()) {SCALED_SIZE} else {SIZE};
-        let char_set: Span<felt252> = token_data.class.get_char_set();
-        let char_set_sizes: Span<usize> = token_data.class.get_char_set_sizes();
+        let text_length: usize = if (token_props.class.is_scaled()) {SCALED_SIZE} else {SIZE};
+        let char_set: Span<felt252> = token_props.class.get_char_set();
+        let char_set_sizes: Span<usize> = token_props.class.get_char_set_sizes();
         let char_count: usize = char_set.len();
-        let cells: Span<usize> = Self::_make_cells(*token_data.seed.low, char_count);
+        let cells: Span<usize> = Self::_make_cells(*token_props.seed.low, char_count);
         let mut y: usize = 0;
         loop {
             if (y == SIZE) { break; }
