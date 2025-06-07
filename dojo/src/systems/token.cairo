@@ -178,13 +178,13 @@ pub mod token {
         // fn get_token_props(self: @ContractState, token_id: u128) -> Gen2Props {
         //     let mut store: Store = StoreTrait::new(self.world_default());
         //     let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id);
-        //     (seed.get_gen2_props())
+        //     (seed.generate_props())
         // }
 
         fn get_token_svg(ref self: ContractState, token_id: u128) -> ByteArray {
             let mut store: Store = StoreTrait::new(self.world_default());
             let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id);
-            (Gen2RendererTrait::render_svg(@seed.get_gen2_props()))
+            (Gen2RendererTrait::render_svg(@seed.generate_props()))
         }
 
         //
@@ -244,7 +244,7 @@ pub mod token {
             let mut store: Store = StoreTrait::new(self.world_default());
             // gather data
             let seed: Seed = store.get_seed(starknet::get_contract_address(), token_id.low);
-            let token_props: Gen2Props = seed.get_gen2_props();
+            let token_props: Gen2Props = seed.generate_props();
             let svg: ByteArray = Gen2RendererTrait::render_svg(@token_props);
             // return the metadata to be rendered by the component
             // https://docs.opensea.io/docs/metadata-standards#metadata-structure

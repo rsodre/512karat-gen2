@@ -8,9 +8,10 @@ mod models {
     pub mod seed;
     pub mod token_config;
     pub mod gen2 {
-        pub mod class;
         pub mod constants;
         pub mod props;
+        pub mod class;
+        pub mod palette;
     }
 }
 mod interfaces {
@@ -24,6 +25,7 @@ mod libs {
 mod utils {
     pub mod hash;
     pub mod misc;
+    pub mod short_string;
 }
 
 #[cfg(test)]

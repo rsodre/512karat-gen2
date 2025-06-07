@@ -5,6 +5,7 @@ use karat_gen2::models::{
     gen2::{
         props::{Gen2Props},
         class::{ClassTrait},
+        palette::{PaletteTrait},
     },
 };
 use karat_gen2::utils::misc::{safe_sub};
@@ -27,6 +28,7 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
         let char_set: Span<felt252> = token_props.class.get_char_set();
         let char_set_lengths: Span<usize> = token_props.class.get_char_set_lengths();
         let (text_length, text_scale): (usize, ByteArray) = token_props.class.get_text_size();
+        let (color_bg, color_ink, color_shadow): (ByteArray, ByteArray, ByteArray) = token_props.palette.get_colors();
         //---------------------------
         // Build SVG
         //
@@ -44,10 +46,18 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
                 _WIDTH,
                 _HEIGHT,
         ));
+        //
+        // styles
+        let shadow_style: ByteArray =
+            if (color_shadow.len() != 0) {format!("text-shadow:0.8px 0.8px {};", color_shadow)}
+            else {""};
         result.append(@format!(
-            "<style>.BG{{fill:#00000b;}}text{{letter-spacing:0;transform:scaleX({});fill:#c2e0fd;font-size:1px;font-family:'{}';dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}}</style>",
-                text_scale,
+            "<style>.BG{{fill:{};}}text{{fill:{};font-size:1px;font-family:'{}';{}transform:scaleX({});letter-spacing:0;dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}}</style>",
+                color_bg,
+                color_ink,
                 font_name,
+                shadow_style,
+                text_scale,
         ));
         result.append(@format!(
             "<g><rect class=\"BG\" x=\"-{}\" y=\"-{}\" width=\"{}\" height=\"{}\" /><g>",
@@ -164,31 +174,59 @@ mod unit {
     use karat_gen2::models::gen2::{
         props::{Gen2Props},
         class::{Class, ClassTrait},
+        palette::{PaletteTrait},
     };
     use karat_gen2::utils::hash::{make_seed};
     use karat_gen2::tests::tester::tester::{OWNER};
 
     fn _name_class_props(class: Class, token_id: u128) -> Gen2Props {
+        let seed: u256 = make_seed(OWNER(), token_id).into();
         (Gen2Props {
             token_id,
-            seed: make_seed(OWNER(), token_id).into(),
+            seed,
             class,
+            palette: PaletteTrait::randomize(seed),
             realm_id: token_id,
             attributes: [].span(),
         })
     }
 
+    fn _dump_class_svg(class: Class) {
+        // let i: u128 = class.into();
+        // let props = _name_class_props(class, (i+1));
+        // let svg = Gen2RendererTrait::render_svg(@props);
+        // println!("____SVG[{}][{}]:{}", i, class.name(), svg);
+    }
+
     #[test]
+    #[ignore]
     fn test_class_svgs() {
         let mut i: u128 = 0;
         loop {
             let class: Class = i.into();
             if (class == Class::Count) { break; }
-            let props = _name_class_props(class, i+1);
-            let svg = Gen2RendererTrait::render_svg(@props);
-            println!("____SVG[{}][{}]:{}", i, class.name(), svg);
+            _dump_class_svg(class);
             i += 1;
         }
     }
+
+    #[test]
+    fn test_class_a() { _dump_class_svg(Class::A); }
+    #[test]
+    fn test_class_b() { _dump_class_svg(Class::B); }
+    #[test]
+    fn test_class_c() { _dump_class_svg(Class::C); }
+    #[test]
+    fn test_class_d() { _dump_class_svg(Class::D); }
+    #[test]
+    fn test_class_e() { _dump_class_svg(Class::E); }
+    #[test]
+    fn test_class_g() { _dump_class_svg(Class::G); }
+    #[test]
+    fn test_class_h() { _dump_class_svg(Class::H); }
+    #[test]
+    fn test_class_v() { _dump_class_svg(Class::V); }
+    #[test]
+    fn test_class_l() { _dump_class_svg(Class::L); }
 
 }

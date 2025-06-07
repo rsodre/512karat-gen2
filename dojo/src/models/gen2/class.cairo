@@ -10,8 +10,14 @@ pub enum Class {
     H,
     V,
     L,
+    //----
     Count,
 }
+
+
+//---------------------------------------
+// Traits
+//
 
 #[generate_trait]
 pub impl ClassImpl of ClassTrait {

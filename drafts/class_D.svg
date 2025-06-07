@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="960" height="1200" viewBox="-6 -6 48 60">
-  <style>.BG{fill:#00000b;}text{letter-spacing:0;transform:scaleX(1);fill:#c2e0fd;font-size:1px;font-family:'Courier New';dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}</style>
+  <style>.BG{fill:#ffffff;}text{fill:#FF005F;font-size:1px;font-family:'Courier New';transform:scaleX(1);letter-spacing:0;dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}</style>
   <g>
     <rect class="BG" x="-6" y="-6" width="48" height="60" />
     <g>
