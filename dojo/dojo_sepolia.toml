@@ -24,8 +24,8 @@ chain_id = "SN_SEPOLIA"
 # rpc_url = "https://api.cartridge.gg/x/starknet/sepolia" # or env: STARKNET_RPC_URL
 # account_address = ""  # env: DOJO_ACCOUNT_ADDRESS
 # private_key = ""      # env: DOJO_PRIVATE_KEY
-world_address = "0xeb59de33e9401040ed51ba6c0ce429d68a8cc3efba6f3b506a39d25de946f2"
-# world_block = 799759    # Karat deployment block
+world_address = "0x35383a8503443d1258cdf684a3b43999af6a170d833b5014057c434c75612f6"
+world_block = 799759    # Karat deployment block
 
 #--------------------------
 # namespaces

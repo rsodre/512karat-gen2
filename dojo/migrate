@@ -3,12 +3,12 @@ set -e # enable exit on error
 source scripts/setup.sh
 
 if [[
-  -z "$PROJECT_NAME" ||
-  -z "$PROFILE" ||
-  -z "$MANIFEST_FILE_PATH" ||
-  "$RPC_URL" != "http"* ||
-  "$WORLD_ADDRESS" != "0x"* ||
-  -z "$WORLD_BLOCK"
+  -z "$PROJECT_NAME"
+  || -z "$PROFILE"
+  || -z "$MANIFEST_FILE_PATH"
+  || "$RPC_URL" != "http"*
+  || "$WORLD_ADDRESS" != "0x"*
+  # || -z "$WORLD_BLOCK"
 ]]; then
   echo "! Missing data 👎"
   exit 1
