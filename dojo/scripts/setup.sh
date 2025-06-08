@@ -96,10 +96,9 @@ export WORLD_BLOCK=$(get_profile_env "world_block")
 export ACCOUNT_ADDRESS=${DOJO_ACCOUNT_ADDRESS:-$(get_profile_env "account_address")}
 export RPC_URL=${STARKNET_RPC_URL:-$(get_profile_env "rpc_url")}
 
+export CLIENT_MANIFEST_PATH="../../../CC/cc-dapp-v2/web/src/networks/generated/$GAME_SLUG"
 export MANIFEST_FILE_PATH="./manifest_$PROFILE.json"
 export BINDINGS_PATH="./bindings"
-export SDK_GAME_PATH="../sdk/src/games/$GAME_SLUG"
-export SDK_MANIFEST_PATH="$SDK_GAME_PATH/config/manifests"
 
 # contracts
 export MAIN_ADDRESS=$(get_contract_address "karat_gen2-minter")

@@ -24,7 +24,7 @@ chain_id = "KATANA_LOCAL"
 rpc_url = "http://localhost:5050"
 account_address = "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
 private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
-world_address = "0xeb59de33e9401040ed51ba6c0ce429d68a8cc3efba6f3b506a39d25de946f2"
+world_address = "0x35383a8503443d1258cdf684a3b43999af6a170d833b5014057c434c75612f6"
 world_block = 1
 
 #--------------------------
