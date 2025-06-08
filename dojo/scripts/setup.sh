@@ -101,7 +101,8 @@ export MANIFEST_FILE_PATH="./manifest_$PROFILE.json"
 export BINDINGS_PATH="./bindings"
 
 # contracts
-export MAIN_ADDRESS=$(get_contract_address "karat_gen2-minter")
+export TOKEN_ADDRESS=$(get_contract_address "karat_gen2-token")
+export MINTER_ADDRESS=$(get_contract_address "karat_gen2-minter")
 
 # match rpc chain id with profile
 export CHAIN_ID=$(starkli chain-id --no-decode --rpc $RPC_URL | xxd -r -p)
@@ -124,5 +125,6 @@ echo "PC Url     : $RPC_URL"
 echo "Chain Id   : $CHAIN_ID"
 echo "World      : $WORLD_ADDRESS"
 echo "Account    : $ACCOUNT_ADDRESS"
-echo "::main     : $MAIN_ADDRESS"
+echo "::token    : $TOKEN_ADDRESS"
+echo "::minter   : $MINTER_ADDRESS"
 echo "------------------------------------------------------------------------------"

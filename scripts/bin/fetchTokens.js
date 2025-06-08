@@ -10,7 +10,7 @@ const contractAddress = '0x07d8ea58612a5de25f29281199a4fc1f2ce42f0f207f93c3a3528
 
 // Get abi from manifest
 const abi = manifest.contracts.reduce((acc, c) => {
-  return acc ?? (c.tag === 'karat-karat_token' ? c.abi : null);
+  return acc ?? (c.tag === 'karat_gen2-token' ? c.abi : null);
 }, null);
 
 // create provider + contract
