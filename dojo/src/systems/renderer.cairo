@@ -8,7 +8,7 @@ use karat_gen2::models::{
         palette::{PaletteTrait},
     },
 };
-use karat_gen2::utils::misc::{safe_sub};
+use karat_gen2::utils::math::{SafeMathU32};
 
 const GAP: usize = 6;
 const WIDTH: usize = (12 * 3);
@@ -136,19 +136,19 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
                     // fade out borders
                     let mut f: usize = 0;
                     if (fade_type == 1 && (x + norm_y) > HALF_H) { // inside-out
-                        let fy = safe_sub(norm_y, HALF_H);
+                        let fy = SafeMathU32::sub(norm_y, HALF_H);
                         f = ((x + fy) / fade_amount);
                     } else if (fade_type == 2 && (x + norm_y) < HALF_H) { // inverted border
                         f = ((x + norm_y) / fade_amount) * 2;
                     } else if (fade_type == 3 ) { // top/bottom v2
-                        f = (safe_sub(HALF_H, norm_y) / fade_amount);
+                        f = (SafeMathU32::sub(HALF_H, norm_y) / fade_amount);
                     } else if (fade_type == 4 ) { // top/bottom
-                        f = (safe_sub(norm_y, HALF_H) / fade_amount);
+                        f = (SafeMathU32::sub(norm_y, HALF_H) / fade_amount);
                     } else if (fade_type == 5 ) { // sides
-                        f = (safe_sub(HALF_W, norm_x) / fade_amount);
+                        f = (SafeMathU32::sub(HALF_W, norm_x) / fade_amount);
                     }
                     if (f > 0) {
-                        value = safe_sub(value, f);
+                        value = SafeMathU32::sub(value, f);
                     }
                 } else {
                     // mirror LEFT>RIGHT

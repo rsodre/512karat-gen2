@@ -1329,7 +1329,7 @@
   "contracts": [
     {
       "address": "0x1795a40c0b3838406a359fcc5ff9dc1cd90505a1da3b0b6f8a8b192da3a9966",
-      "class_hash": "0x19a8c5dd9d7847e99e790b6d8294dde6d255bf821f4ef0562b114aa0c90043d",
+      "class_hash": "0x198bfb28e3e01e23173fb13b61c5209806c6ff05b797751d063aefeb3daaee0",
       "abi": [
         {
           "type": "impl",
@@ -1422,6 +1422,20 @@
         },
         {
           "type": "enum",
+          "name": "core::option::Option::<core::integer::u64>",
+          "variants": [
+            {
+              "name": "Some",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "None",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
           "name": "core::bool",
           "variants": [
             {
@@ -1470,6 +1484,22 @@
               "outputs": [
                 {
                   "type": "core::option::Option::<core::byte_array::ByteArray>"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "get_presale_countdown",
+              "inputs": [
+                {
+                  "name": "token_contract_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::option::Option::<core::integer::u64>"
                 }
               ],
               "state_mutability": "view"

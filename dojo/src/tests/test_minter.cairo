@@ -10,7 +10,7 @@ mod tests {
         models::token_config::{TokenConfig},
         models::seed::{Seed,},
         models::gen2::{constants},
-        utils::misc::{WEI},
+        utils::misc::{CONST, WEI},
     };
 
     use karat_gen2::tests::{
@@ -132,9 +132,11 @@ mod tests {
         let sys: TestSystems = tester::setup_world(FLAGS::NONE);
         assert_eq!(sys.token.total_supply(), 0, "supply = 0");
         // release...
+        assert_eq!(sys.minter.get_presale_countdown(sys.token.contract_address), Option::None, "presale_none");
         tester::impersonate(OTHER());
         _assert_cannot_mint(sys, "Unavailable");
         _start_presale(sys);
+        assert_eq!(sys.minter.get_presale_countdown(sys.token.contract_address).unwrap(), CONST::ONE_DAY, "presale_ONE_DAY");
         // approve...
         tester::impersonate(OTHER());
         _assert_cannot_mint(sys, "Insufficient balance");
@@ -150,8 +152,17 @@ mod tests {
         tester::impersonate(BUMMER());
         _assert_cannot_mint(sys, "Ineligible");
         //
+        // elapse some time...
+        tester::elapse_block_timestamp(CONST::ONE_DAY - 1000);
+        assert_eq!(sys.minter.get_presale_countdown(sys.token.contract_address).unwrap(), 1000, "presale_1000");
+        _assert_cannot_mint(sys, "Ineligible");
+        tester::elapse_block_timestamp(999);
+        assert_eq!(sys.minter.get_presale_countdown(sys.token.contract_address).unwrap(), 1, "presale_1");
+        _assert_cannot_mint(sys, "Ineligible");
+        //
         // after presale...
         _end_presale(sys);
+        assert_eq!(sys.minter.get_presale_countdown(sys.token.contract_address).unwrap(), 0, "presale_ended");
         tester::impersonate(BUMMER());
         _assert_cannot_mint(sys, "Insufficient balance");
         _approve(sys, BUMMER(), 2);

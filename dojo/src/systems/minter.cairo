@@ -4,6 +4,7 @@ use starknet::{ContractAddress};
 pub trait IMinter<TState> {
     fn get_price(self: @TState, token_contract_address: ContractAddress) -> (ContractAddress, u128);
     fn can_mint(self: @TState, token_contract_address: ContractAddress, recipient: ContractAddress) -> Option<ByteArray>;
+    fn get_presale_countdown(self: @TState, token_contract_address: ContractAddress) -> Option<u64>;
     fn mint(ref self: TState, token_contract_address: ContractAddress) -> u128;
     fn mint_to(ref self: TState, token_contract_address: ContractAddress, recipient: ContractAddress) -> u128;
 
@@ -29,7 +30,8 @@ pub mod minter {
         token_config::{TokenConfig, TokenConfigTrait},
         gen2::{constants},
     };
-
+    use karat_gen2::utils::math::{SafeMathU64};
+    
     mod Errors {
         pub const CALLER_IS_NOT_OWNER: felt252      = 'MINTER: caller is not owner';
         pub const INVALID_TREASURY_ADDRESS: felt252 = 'MINTER: invalid treasury';
@@ -110,6 +112,16 @@ pub mod minter {
             } else {
                 // can mint!
                 (Option::None)
+            }
+        }
+
+        fn get_presale_countdown(self: @ContractState, token_contract_address: ContractAddress) -> Option<u64> {
+            let mut store: Store = StoreTrait::new(self.world_default());
+            let token_config: TokenConfig = store.get_token_config(token_contract_address);
+            if (token_config.presale_timestamp_end == 0) {
+                (Option::None)
+            } else {
+                (Option::Some(SafeMathU64::sub(token_config.presale_timestamp_end, starknet::get_block_timestamp())))
             }
         }
 
