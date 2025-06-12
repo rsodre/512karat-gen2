@@ -4,7 +4,7 @@ pub mod tester {
     use starknet::{ContractAddress, testing};
 
     use dojo::world::{WorldStorage, IWorldDispatcherTrait};
-    // use dojo::model::{ModelStorageTest};
+    use dojo::model::{ModelStorageTest};
     use dojo_cairo_test::{
         spawn_test_world,
         NamespaceDef, TestResource,
@@ -15,6 +15,10 @@ pub mod tester {
     pub use karat_gen2::systems::{
         token::{ITokenDispatcher, ITokenDispatcherTrait},
         minter::{IMinterDispatcher, IMinterDispatcherTrait},
+    };
+    pub use karat_gen2::models::{
+        token_config::{TokenConfig},
+        seed::{Seed},
     };
     pub use karat_gen2::libs::store::{Store, StoreTrait};
     pub use karat_gen2::libs::dns::{DnsTrait};
@@ -212,5 +216,19 @@ pub mod tester {
             };
             (result)
         })
+    }
+
+    //
+    // setters
+    //
+
+    // depends on use dojo::model::{Model};
+    #[inline(always)]
+    pub fn set_token_config(ref world: WorldStorage, token_config: @TokenConfig) {
+        world.write_model_test(token_config);
+    }
+    #[inline(always)]
+    pub fn set_seed(ref world: WorldStorage, seed: @Seed) {
+        world.write_model_test(seed);
     }
 }

@@ -136,7 +136,7 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
                     // fade out borders
                     let mut f: usize = 0;
                     if (fade_type == 1 && (x + norm_y) > HALF_H) { // inside-out
-                        let fy = (norm_y - HALF_H);
+                        let fy = safe_sub(norm_y, HALF_H);
                         f = ((x + fy) / fade_amount);
                     } else if (fade_type == 2 && (x + norm_y) < HALF_H) { // inverted border
                         f = ((x + norm_y) / fade_amount) * 2;

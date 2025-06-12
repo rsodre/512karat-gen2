@@ -8,12 +8,14 @@ mod tests {
         systems::{token::{ITokenDispatcherTrait}},
         systems::{minter::{IMinterDispatcherTrait}},
         models::gen2::{constants},
+        models::seed::{Seed},
         utils::misc::{WEI},
     };
     use karat_gen2::tests::{
         tester::{tester},
         tester::tester::{
             TestSystems, FLAGS,
+            Store, StoreTrait,
             OWNER, TREASURY,
         },
     };
@@ -25,6 +27,12 @@ mod tests {
     pub const DEFAULT_DENOMINATOR: u128 = 10_000;
     pub const DEFAULT_FEE: u128 = 250;
 
+    fn _set_seed(ref sys: TestSystems, token_id: u128, new_seed: felt252) {
+        let mut store: Store = StoreTrait::new(sys.world);
+        let mut seed: Seed = store.get_seed(sys.token.contract_address, token_id);
+        seed.seed = new_seed;
+        tester::set_seed(ref sys.world, @seed);
+    }
 
     #[test]
     fn test_initialized() {
@@ -45,9 +53,10 @@ mod tests {
 
     #[test]
     fn test_token_uri() {
-        let sys: TestSystems = tester::setup_world(FLAGS::UNPAUSE);
+        let mut sys: TestSystems = tester::setup_world(FLAGS::UNPAUSE);
         tester::impersonate(OWNER());
         sys.minter.mint(sys.token.contract_address);
+_set_seed(ref sys, 1, 0x05ffb53ecb1afe4b91ff5d2365207ed973f916afae1ebfaf73a90aa56c6368cb);
         let uri: ByteArray = sys.token.token_uri(1);
         let uri_camel = sys.token.tokenURI(1);
 println!("___contract_uri(1):[{}]", uri);
