@@ -53,6 +53,9 @@ pub trait IToken<TState> {
     fn burn(ref self: TState, token_id: u256);
     fn get_token_svg(ref self: TState, token_id: u128) -> ByteArray;
     fn set_paused(ref self: TState, is_paused: bool);
+    fn update_token_metadata(ref self: TState, token_id: u256);
+    fn update_tokens_metadata(ref self: TState, from_token_id: u256, to_token_id: u256);
+    fn update_contract_metadata(ref self: TState);
 }
 
 #[starknet::interface]
@@ -62,6 +65,9 @@ pub trait ITokenPublic<TState> {
     fn get_token_svg(ref self: TState, token_id: u128) -> ByteArray;
     // admin
     fn set_paused(ref self: TState, is_paused: bool);
+    fn update_token_metadata(ref self: TState, token_id: u256);
+    fn update_tokens_metadata(ref self: TState, from_token_id: u256, to_token_id: u256);
+    fn update_contract_metadata(ref self: TState);
 }
 
 #[dojo::contract]
@@ -194,6 +200,18 @@ pub mod token {
             let mut store: Store = StoreTrait::new(self.world_default());
             self._assert_caller_is_minter(@store);
             self.erc721_combo._set_minting_paused(is_paused);
+        }
+        fn update_token_metadata(ref self: ContractState, token_id: u256) {
+            self._assert_caller_is_owner();
+            self.erc721_combo._emit_metadata_update(token_id);
+        }
+        fn update_tokens_metadata(ref self: ContractState, from_token_id: u256, to_token_id: u256) {
+            self._assert_caller_is_owner();
+            self.erc721_combo._emit_batch_metadata_update(from_token_id, to_token_id);
+        }
+        fn update_contract_metadata(ref self: ContractState) {
+            self._assert_caller_is_owner();
+            self.erc721_combo._emit_contract_uri_updated();
         }
     }
 

@@ -14,5 +14,5 @@ fi
 pushd $(dirname "$0")/..
 
 # sozo execute --world <WORLD_ADDRESS> <CONTRACT> <ENTRYPOINT>
-echo "> token_uri($TOKEN_ID)..."
-sozo call karat_gen2-token --world $WORLD_ADDRESS token_uri -v u256:$TOKEN_ID
+echo "> update_token_metadata($TOKEN_ID)..."
+sozo execute karat_gen2-token --world $WORLD_ADDRESS --wait update_token_metadata u256:$TOKEN_ID
