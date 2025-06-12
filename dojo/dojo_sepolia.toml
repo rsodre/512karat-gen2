@@ -57,7 +57,7 @@ default = "karat_gen2"
 "karat_gen2-minter" = [
   "0x020dD2C29473df564F9735B7c16063Eb3B7A4A3bd70a7986526636Fe33E8227d", # treasury_address
   "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d", # strk_address
-  "0x05a2c005d0d50fcd19828cb0af4252a9dcd980d196676d441a200b1a0ed0b252", # karat_address
+  "0x007983f8670a1ad69e289ba6ab8fff66ce92d4e7a560be51d977081f1317f614", # karat_address
 ]
 "karat_gen2-token" = [
   "0x020dD2C29473df564F9735B7c16063Eb3B7A4A3bd70a7986526636Fe33E8227d", # treasury_address

@@ -1329,7 +1329,7 @@
   "contracts": [
     {
       "address": "0x1795a40c0b3838406a359fcc5ff9dc1cd90505a1da3b0b6f8a8b192da3a9966",
-      "class_hash": "0x13e2a85f5ea15a61e96d5624767c2e9d08ddf98133f4353dd3235bc6fd73ac3",
+      "class_hash": "0x19a8c5dd9d7847e99e790b6d8294dde6d255bf821f4ef0562b114aa0c90043d",
       "abi": [
         {
           "type": "impl",
@@ -1460,6 +1460,10 @@
               "inputs": [
                 {
                   "name": "token_contract_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "recipient",
                   "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
@@ -1655,7 +1659,7 @@
       "init_calldata": [
         "0x020dD2C29473df564F9735B7c16063Eb3B7A4A3bd70a7986526636Fe33E8227d",
         "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
-        "0x05a2c005d0d50fcd19828cb0af4252a9dcd980d196676d441a200b1a0ed0b252"
+        "0x007983f8670a1ad69e289ba6ab8fff66ce92d4e7a560be51d977081f1317f614"
       ],
       "tag": "karat_gen2-minter",
       "selector": "0xb26ec2b28ebbbf50342ecbd1cd4da784bd906f69567593e34cec77cb5f30f4",
@@ -1670,7 +1674,7 @@
     },
     {
       "address": "0x70ea289f608f37e2ee38e8a5a5e1cd9203e7666db36714d20382b73302308e5",
-      "class_hash": "0x2e95ebab66abfa46fcdbd13e53849c0d221e03b089e282c0f62402ead80e6a9",
+      "class_hash": "0x33ccec640adb44b489d8113e4679dca03ade2ddf728d04409c858b49991aced",
       "abi": [
         {
           "type": "impl",
@@ -1824,6 +1828,41 @@
                   "type": "core::bool"
                 }
               ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "update_token_metadata",
+              "inputs": [
+                {
+                  "name": "token_id",
+                  "type": "core::integer::u256"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "update_tokens_metadata",
+              "inputs": [
+                {
+                  "name": "from_token_id",
+                  "type": "core::integer::u256"
+                },
+                {
+                  "name": "to_token_id",
+                  "type": "core::integer::u256"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "update_contract_metadata",
+              "inputs": [],
               "outputs": [],
               "state_mutability": "external"
             }
@@ -2695,6 +2734,9 @@
         "burn",
         "get_token_svg",
         "set_paused",
+        "update_token_metadata",
+        "update_tokens_metadata",
+        "update_contract_metadata",
         "upgrade",
         "safe_transfer_from",
         "transfer_from",
