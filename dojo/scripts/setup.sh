@@ -35,7 +35,7 @@ do
     export ARG_BINDINGS="--typescript"
   elif [[ $arg == "--verbose" ]]; then
     export ARG_VERBOSE="-vvv"
-  else
+  elif [[ $arg == --* ]]; then
     echo "❌ Error: Invalid argument: $arg"
     exit 1
   fi
