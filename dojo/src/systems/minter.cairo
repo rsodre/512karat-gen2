@@ -3,13 +3,14 @@ use starknet::{ContractAddress};
 #[starknet::interface]
 pub trait IMinter<TState> {
     fn get_price(self: @TState, token_contract_address: ContractAddress) -> (ContractAddress, u128);
-    fn can_mint(self: @TState, token_contract_address: ContractAddress) -> Option<ByteArray>;
+    fn can_mint(self: @TState, token_contract_address: ContractAddress, recipient: ContractAddress) -> Option<ByteArray>;
     fn mint(ref self: TState, token_contract_address: ContractAddress) -> u128;
     fn mint_to(ref self: TState, token_contract_address: ContractAddress, recipient: ContractAddress) -> u128;
 
     // admin
     fn set_paused(ref self: TState, token_contract_address: ContractAddress, is_paused: bool);
     fn set_purchase_price(ref self: TState, token_contract_address: ContractAddress, purchase_coin_address: ContractAddress, purchase_price_eth: u8);
+    // fn set_presale_token(ref self: TState, token_contract_address: ContractAddress, presale_token_address: ContractAddress);
 }
 
 #[dojo::contract]
@@ -89,12 +90,11 @@ pub mod minter {
             (token_config.purchase_coin_address, token_config.purchase_price_wei)
         }
 
-        fn can_mint(self: @ContractState, token_contract_address: ContractAddress) -> Option<ByteArray> {
+        fn can_mint(self: @ContractState, token_contract_address: ContractAddress, recipient: ContractAddress) -> Option<ByteArray> {
             let mut store: Store = StoreTrait::new(self.world_default());
             let token_config: TokenConfig = store.get_token_config(token_contract_address);
             let token_dispatcher = ITokenDispatcher{contract_address:token_contract_address};
             let is_presale: bool = (starknet::get_block_timestamp() <= token_config.presale_timestamp_end);
-            let recipient: ContractAddress = starknet::get_caller_address();
             if (token_config.presale_timestamp_end == 0) {
                 (Option::Some("Unavailable"))
             } else if (token_dispatcher.last_token_id() == token_dispatcher.max_supply()) {
@@ -193,6 +193,18 @@ pub mod minter {
             token_config.purchase_price_wei = WEI(purchase_price_eth.into());
             store.set_token_config(@token_config);
         }
+
+        // fn set_presale_token(ref self: ContractState,
+        //     token_contract_address: ContractAddress,
+        //     presale_token_address: ContractAddress,
+        // ) {
+        //     self._assert_caller_is_owner();
+        //     let mut store: Store = StoreTrait::new(self.world_default());
+        //     let mut token_config: TokenConfig = store.get_token_config(token_contract_address);
+        //     assert(token_config.minter_address == starknet::get_contract_address(), Errors::INVALID_TOKEN_ADDRESS);
+        //     token_config.presale_token_address = presale_token_address;
+        //     store.set_token_config(@token_config);
+        // }
     }
 
     //-----------------------------------
