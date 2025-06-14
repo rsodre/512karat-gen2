@@ -24,12 +24,11 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
     // internal
     fn _generate_class(self: @Seed) -> Class {
         let seed: u256 = (*self.seed).into();
-        let s: u128 = (seed.low % ClassTrait::class_count());
-        (s.into())
+        (ClassTrait::randomize(seed.low))
     }
     fn _generate_palette(self: @Seed) -> Palette {
         let seed: u256 = (*self.seed).into();
-        (PaletteTrait::randomize(seed))
+        (PaletteTrait::randomize(seed.high))
     }
     fn _generate_realm_id(self: @Seed) -> u128 {
         let seed: u256 = (*self.seed).into();
@@ -41,7 +40,7 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
     fn generate_props(self: @Seed) -> Gen2Props {
         let palette: Palette = self._generate_palette();
         let class: Class =
-            if (palette == Palette::Mono(0)) {Class::E}
+            if (palette == Palette::Mono(0)) {Class::E(0)}
             else {self._generate_class()};
         let realm_id: u128 = self._generate_realm_id();
         let mut attributes: Span<Attribute> = array![
@@ -50,11 +49,15 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
                 value: class.name(),
             },
             Attribute {
+                key: "Class Style",
+                value: class.style_name(),
+            },
+            Attribute {
                 key: "Palette",
                 value: palette.name(),
             },
             Attribute {
-                key: "Style",
+                key: "Palette Style",
                 value: palette.style_name(),
             },
             Attribute {
