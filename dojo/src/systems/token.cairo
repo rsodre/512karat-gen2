@@ -202,7 +202,7 @@ pub mod token {
             self.erc721_combo._set_minting_paused(is_paused);
         }
         fn update_token_metadata(ref self: ContractState, token_id: u256) {
-            self._assert_caller_is_owner();
+            // self._assert_caller_is_owner();
             self.erc721_combo._emit_metadata_update(token_id);
         }
         fn update_tokens_metadata(ref self: ContractState, from_token_id: u256, to_token_id: u256) {
@@ -210,7 +210,7 @@ pub mod token {
             self.erc721_combo._emit_batch_metadata_update(from_token_id, to_token_id);
         }
         fn update_contract_metadata(ref self: ContractState) {
-            self._assert_caller_is_owner();
+            // self._assert_caller_is_owner();
             self.erc721_combo._emit_contract_uri_updated();
         }
     }
