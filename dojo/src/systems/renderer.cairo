@@ -24,11 +24,19 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
         //---------------------------
         // get props
         //
-        let font_name: ByteArray = token_props.class.font_name();
-        let char_set: Span<felt252> = token_props.class.get_char_set();
-        let char_set_lengths: Span<usize> = token_props.class.get_char_set_lengths();
-        let (text_length, text_scale): (usize, ByteArray) = token_props.class.get_text_size();
-        let (color_bg, color_ink, color_shadow): (ByteArray, ByteArray, ByteArray) = token_props.palette.get_colors();
+        let (
+            charset,
+            charset_lengths,
+            font_name,
+            text_length,
+            text_scale,
+            text_size,
+        ): (Span<felt252>, Span<usize>, ByteArray, usize, ByteArray, ByteArray) = token_props.class.get_props();
+        let (
+            color_bg,
+            color_ink,
+            color_shadow,
+        ): (ByteArray, ByteArray, ByteArray) = token_props.palette.get_props();
         //---------------------------
         // Build SVG
         //
@@ -52,10 +60,11 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
             if (color_shadow.len() != 0) {format!("text-shadow:0.8px 0.8px {};", color_shadow)}
             else {""};
         result.append(@format!(
-            "<style>.BG{{fill:{};}}text{{fill:{};font-size:1px;font-family:'{}';{}transform:scaleX({});letter-spacing:0;dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}}</style>",
+            "<style>.BG{{fill:{};}}text{{fill:{};font-family:'{}';font-size:{};{}transform:scaleX({});letter-spacing:0;dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}}</style>",
                 color_bg,
                 color_ink,
                 font_name,
+                text_size,
                 shadow_style,
                 text_scale,
         ));
@@ -69,7 +78,7 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
         //---------------------------
         // Build text tags
         //
-        let char_count: usize = char_set.len();
+        let char_count: usize = charset.len();
         let cells: Span<usize> = Self::_make_cells(*token_props.seed, char_count);
         let mut y: usize = 0;
         loop {
@@ -84,7 +93,7 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
             loop {
                 if (x == WIDTH) { break; }
                 let value: @usize = cells.at(y * WIDTH + x);
-                result.append_word(*char_set.at(*value), *char_set_lengths.at(*value));
+                result.append_word(*charset.at(*value), *charset_lengths.at(*value));
                 x += 1;
             };
             // close <text>
@@ -185,17 +194,17 @@ mod unit {
             token_id,
             seed,
             class,
-            palette: PaletteTrait::randomize(seed),
+            palette: PaletteTrait::randomize(seed.high),
             realm_id: token_id,
             attributes: [].span(),
         })
     }
 
     fn _dump_class_svg(class: Class) {
-        // let i: u128 = class.into();
-        // let props = _name_class_props(class, (i+1));
-        // let svg = Gen2RendererTrait::render_svg(@props);
-        // println!("____SVG[{}][{}]:{}", i, class.name(), svg);
+        let i: u128 = class.into();
+        let props = _name_class_props(class, (i+1));
+        let svg = Gen2RendererTrait::render_svg(@props);
+        println!("____SVG[{}][{}]:{}", i, class.name(), svg);
     }
 
     #[test]
@@ -211,22 +220,31 @@ mod unit {
     }
 
     #[test]
-    fn test_class_a() { _dump_class_svg(Class::A); }
+    #[ignore]
+    fn test_class_a() { _dump_class_svg(Class::A(0)); }
     #[test]
-    fn test_class_b() { _dump_class_svg(Class::B); }
+    #[ignore]
+    fn test_class_b() { _dump_class_svg(Class::B(0)); }
     #[test]
-    fn test_class_c() { _dump_class_svg(Class::C); }
+    #[ignore]
+    fn test_class_c() { _dump_class_svg(Class::C(0)); }
     #[test]
-    fn test_class_d() { _dump_class_svg(Class::D); }
+    #[ignore]
+    fn test_class_d() { _dump_class_svg(Class::D(0)); }
     #[test]
-    fn test_class_e() { _dump_class_svg(Class::E); }
+    #[ignore]
+    fn test_class_e() { _dump_class_svg(Class::E(0)); }
     #[test]
-    fn test_class_g() { _dump_class_svg(Class::G); }
+    #[ignore]
+    fn test_class_f() { _dump_class_svg(Class::F(0)); }
     #[test]
-    fn test_class_h() { _dump_class_svg(Class::H); }
+    #[ignore]
+    fn test_class_h() { _dump_class_svg(Class::H(0)); }
     #[test]
-    fn test_class_v() { _dump_class_svg(Class::V); }
+    #[ignore]
+    fn test_class_v() { _dump_class_svg(Class::V(0)); }
     #[test]
-    fn test_class_l() { _dump_class_svg(Class::L); }
+    #[ignore]
+    fn test_class_l() { _dump_class_svg(Class::L(0)); }
 
 }
