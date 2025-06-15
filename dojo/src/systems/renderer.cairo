@@ -26,12 +26,11 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
         //
         let (
             charset,
-            charset_lengths,
             font_name,
             text_length,
             text_scale,
             text_size,
-        ): (Span<felt252>, Span<usize>, ByteArray, usize, ByteArray, ByteArray) = token_props.class.get_props();
+        ): (Span<ByteArray>, ByteArray, usize, ByteArray, ByteArray) = token_props.class.get_props();
         let (
             color_bg,
             color_ink,
@@ -93,7 +92,7 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
             loop {
                 if (x == WIDTH) { break; }
                 let value: @usize = cells.at(y * WIDTH + x);
-                result.append_word(*charset.at(*value), *charset_lengths.at(*value));
+                result.append(charset.at(*value));
                 x += 1;
             };
             // close <text>
