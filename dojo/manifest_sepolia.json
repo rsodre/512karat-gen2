@@ -3,7 +3,7 @@
     "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
     "address": "0x35383a8503443d1258cdf684a3b43999af6a170d833b5014057c434c75612f6",
     "seed": "karat-gen2",
-    "name": "Karat Vol 2",
+    "name": "Karat Gen 2",
     "entrypoints": [
       "uuid",
       "set_metadata",
@@ -1329,7 +1329,7 @@
   "contracts": [
     {
       "address": "0x1795a40c0b3838406a359fcc5ff9dc1cd90505a1da3b0b6f8a8b192da3a9966",
-      "class_hash": "0x198bfb28e3e01e23173fb13b61c5209806c6ff05b797751d063aefeb3daaee0",
+      "class_hash": "0x2b0f968fc6d2ab5279212a018273bcdbb0571de1767869b2577344e44724a57",
       "abi": [
         {
           "type": "impl",
@@ -1704,7 +1704,7 @@
     },
     {
       "address": "0x70ea289f608f37e2ee38e8a5a5e1cd9203e7666db36714d20382b73302308e5",
-      "class_hash": "0x33ccec640adb44b489d8113e4679dca03ade2ddf728d04409c858b49991aced",
+      "class_hash": "0x29181c2b8ac8be72f2ea45e121f6c00e6f20bcc026e008094868594629825f9",
       "abi": [
         {
           "type": "impl",
@@ -1856,6 +1856,18 @@
                 {
                   "name": "is_paused",
                   "type": "core::bool"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "set_reserved_supply",
+              "inputs": [
+                {
+                  "name": "reserved_supply",
+                  "type": "core::integer::u256"
                 }
               ],
               "outputs": [],
@@ -2327,6 +2339,39 @@
             },
             {
               "type": "function",
+              "name": "reserved_supply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "available_supply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "minted_supply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "total_supply",
               "inputs": [],
               "outputs": [
@@ -2350,6 +2395,17 @@
             {
               "type": "function",
               "name": "is_minting_paused",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "is_minted_out",
               "inputs": [],
               "outputs": [
                 {
@@ -2397,6 +2453,39 @@
             {
               "type": "function",
               "name": "maxSupply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "reservedSupply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "availableSupply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "mintedSupply",
               "inputs": [],
               "outputs": [
                 {
@@ -2764,6 +2853,7 @@
         "burn",
         "get_token_svg",
         "set_paused",
+        "set_reserved_supply",
         "update_token_metadata",
         "update_tokens_metadata",
         "update_contract_metadata",
