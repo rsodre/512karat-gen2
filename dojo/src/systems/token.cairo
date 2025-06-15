@@ -28,12 +28,15 @@ pub trait IToken<TState> {
     //-----------------------------------
     // IERC721Minter
     fn max_supply(self: @TState) -> u256;
+    fn reserved_supply(self: @TState) -> u256;
+    fn available_supply(self: @TState) -> u256;
+    fn minted_supply(self: @TState) -> u256;
     fn total_supply(self: @TState) -> u256;
     fn last_token_id(self: @TState) -> u256;
     fn is_minting_paused(self: @TState) -> bool;
+    fn is_minted_out(self: @TState) -> bool;
     fn is_owner_of(self: @TState, address: ContractAddress, token_id: u256) -> bool;
     fn token_exists(self: @TState, token_id: u256) -> bool;
-    fn totalSupply(self: @TState) -> u256;
     //-----------------------------------
     // IERC7572ContractMetadata
     fn contract_uri(self: @TState) -> ByteArray;
@@ -137,6 +140,7 @@ pub mod token {
             Option::None, // use hooks
             Option::Some(constants::MAX_SUPPLY),
         );
+        self.erc721_combo._set_reserved_supply(12);
         self.erc721_combo._set_default_royalty(treasury_address, constants::DEFAULT_ROYALTY);
         // self.erc721_combo._set_minting_paused(true); // no need, using presale state
     }

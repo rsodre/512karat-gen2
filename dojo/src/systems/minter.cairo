@@ -99,7 +99,7 @@ pub mod minter {
             let is_presale: bool = (starknet::get_block_timestamp() <= token_config.presale_timestamp_end);
             if (token_config.presale_timestamp_end == 0) {
                 (Option::Some("Unavailable"))
-            } else if (token_dispatcher.last_token_id() == token_dispatcher.max_supply()) {
+            } else if (token_dispatcher.is_minted_out()) {
                 (Option::Some("Minted out"))
             } else if (token_dispatcher.is_minting_paused()) {
                 (Option::Some("Paused"))
