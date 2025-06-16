@@ -31,7 +31,7 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
             text_length,
             text_scale,
             font_size,
-        ): (Span<felt252>, Span<usize>, ByteArray, usize, ByteArray, ByteArray) = token_props.class.get_props();
+        ): (Span<felt252>, Span<usize>, ByteArray, ByteArray, ByteArray, ByteArray) = token_props.class.get_props();
         let (
             color_bg,
             color_ink,
@@ -41,23 +41,23 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
         // Build SVG
         //
         let mut result: ByteArray = "";
-        let _WIDTH: usize = (GAP + WIDTH + GAP);
-        let _HEIGHT: usize = (GAP + HEIGHT + GAP);
-        let RES_X: usize = _WIDTH * 20;     // 960
-        let RES_Y: usize = _HEIGHT * 20;    // 1200
+        let FULL_WIDTH: usize = (GAP + WIDTH + GAP);
+        let FULL_HEIGHT: usize = (GAP + HEIGHT + GAP);
+        let RES_X: usize = FULL_WIDTH * 20;     // 960
+        let RES_Y: usize = FULL_HEIGHT * 20;    // 1200
         result.append(@format!(
             "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" width=\"{}\" height=\"{}\" viewBox=\"-{} -{} {} {}\">",
                 RES_X,
                 RES_Y,
                 GAP,
                 GAP,
-                _WIDTH,
-                _HEIGHT,
+                FULL_WIDTH,
+                FULL_HEIGHT,
         ));
         //
         // styles
         let shadow_style: ByteArray =
-            if (color_shadow.len() != 0) {format!("text-shadow:0.8px 0.8px {};", color_shadow)}
+            if (color_shadow.len() != 0) {format!("text-shadow:0.8px 0.8px 1px {};", color_shadow)}
             else {""};
         result.append(@format!(
             "<style>.BG{{fill:{};}}text{{fill:{};font-family:'{}';font-size:{};{}transform:scaleX({});letter-spacing:0;dominant-baseline:hanging;shape-rendering:crispEdges;white-space:pre;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}}</style>",
@@ -72,8 +72,8 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
             "<g><rect class=\"BG\" x=\"-{}\" y=\"-{}\" width=\"{}\" height=\"{}\" /><g>",
                 GAP,
                 GAP,
-                _WIDTH,
-                _HEIGHT,
+                FULL_WIDTH,
+                FULL_HEIGHT,
         ));
         //---------------------------
         // Build text tags

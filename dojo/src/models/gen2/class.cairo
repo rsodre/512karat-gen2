@@ -73,9 +73,9 @@ pub impl ClassImpl of ClassTrait {
     fn style_name(self: @Class) -> ByteArray {
         (format!("{}-{}", self.name(), ('A'+self.get_index().into()).to_string()))
     }
-    fn get_props(self: @Class) -> (Span<felt252>, Span<usize>, ByteArray, usize, ByteArray, ByteArray) {
+    fn get_props(self: @Class) -> (Span<felt252>, Span<usize>, ByteArray, ByteArray, ByteArray, ByteArray) {
         let index: u32 = self.get_index();
-        let (text_length, text_scale): (usize, ByteArray) = self._get_text_props();
+        let (text_length, text_scale): (ByteArray, ByteArray) = self._get_text_props();
         let (font_size): (ByteArray,) = self._get_adjustments();
         (
             self._get_charsets().at(index).clone(),
@@ -180,18 +180,18 @@ pub impl ClassImpl of ClassTrait {
              Class::Count => array![array![].span()].span(),
         }
     }
-    fn _get_text_props(self: @Class) -> (u32, ByteArray) {
+    fn _get_text_props(self: @Class) -> (ByteArray, ByteArray) {
         match self {
-            Class::A => (18, "1.9"),
-            Class::B => (18, "1.9"),
-            Class::C => (36, "1"),
-            Class::D => (36, "1"),
-            Class::E => (21, "1.667"),
-            Class::F => (18, "1.9"),
-            Class::H => (21, "1.667"),
-            Class::V => (36, "1"),
-            Class::L => (36, "1"),  
-            Class::Count => (0, ""),
+            Class::A => ("18", "1.92"),
+            Class::B => ("17.6", "1.92"),
+            Class::C => ("36", "1"),
+            Class::D => ("36", "1"),
+            Class::E => ("21", "1.667"),
+            Class::F => ("18", "1.9"),
+            Class::H => ("21", "1.667"),
+            Class::V => ("36", "1"),
+            Class::L => ("36", "1"),  
+            Class::Count => ("", ""),
         }
     }
     fn _font_family(self: @Class) -> ByteArray {
@@ -221,7 +221,7 @@ pub impl ClassImpl of ClassTrait {
             Class::D => (("1px"),),
             Class::E => (("1px"),),
             Class::F => (("1px"),),
-            Class::H => (("1.15px"),),
+            Class::H => (("1px"),),
             Class::V => (("1px"),),
             Class::L => (("1px"),),  
             Class::Count => ((""),),
