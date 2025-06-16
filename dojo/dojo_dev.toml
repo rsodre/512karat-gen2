@@ -5,11 +5,11 @@
 #
 
 [world]
-name = "Karat Vol 2"
+name = "Karat Gen 2"
 description = "Generative Art made with Dojo."
-# icon_uri = "https://collect-code.com/assets/cc_logo/cc_logo1_red.png"
-icon_uri = "https://collect-code.com/assets/cc_logo/cc_logo1.png"
-cover_uri = "https://collect-code.com/tokens/KaratBanner1.png"
+# icon_uri = "https://collect-code.com/assets/cc_logo/cc_logo1.png"
+icon_uri = "https://karat.collect-code.com/assets/karat_gen2/icon.jpg"
+cover_uri = "https://karat.collect-code.com/assets/karat_gen2/banner.jpg"
 website = "https://karat.collect-code.com"
 seed = "karat-gen2"
 
