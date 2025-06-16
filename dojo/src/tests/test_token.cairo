@@ -16,7 +16,7 @@ mod tests {
         tester::tester::{
             TestSystems, FLAGS,
             Store, StoreTrait,
-            OWNER, TREASURY,
+            OWNER, OTHER, TREASURY,
         },
     };
 
@@ -111,6 +111,49 @@ println!("___contract_uri(1):[{}]", uri);
         let (receiver, fees) = sys.token.royalty_info(1, PRICE.into());
         assert_eq!(receiver, TREASURY(), "set: wrong receiver");
         assert_eq!(fees, WEI(25).into(), "set: wrong fees"); // default 2.5%
+    }
+    
+    //
+    // admin
+    //
+
+    #[test]
+    fn test_admin_set_paused() {
+        let sys: TestSystems = tester::setup_world(FLAGS::NONE);
+        assert!(!sys.token.is_minting_paused(), "paused:START");
+        tester::impersonate(sys.minter.contract_address);
+        sys.token.set_paused(false);
+        assert!(!sys.token.is_minting_paused(), "paused:false");
+        sys.token.set_paused(true);
+        assert!(sys.token.is_minting_paused(), "paused:true");
+    }
+
+    #[test]
+    #[should_panic(expected:('KARAT: caller is not minter','ENTRYPOINT_FAILED'))]
+    fn test_admin_set_paused_not_minter() {
+        let sys: TestSystems = tester::setup_world(FLAGS::NONE);
+        tester::impersonate(OWNER());
+        sys.token.set_paused(false);
+    }
+
+    #[test]
+    fn test_admin_set_reserved_supply() {
+        let sys: TestSystems = tester::setup_world(FLAGS::NONE);
+        assert_eq!(sys.token.reserved_supply(), 12, "reserved_supply:START");
+        tester::impersonate(OWNER());
+        sys.token.set_reserved_supply(10);
+        assert_eq!(sys.token.reserved_supply(), 10, "reserved_supply:10");
+        tester::impersonate(OWNER());
+        sys.token.set_reserved_supply(0);
+        assert_eq!(sys.token.reserved_supply(), 0, "reserved_supply:0");
+    }
+
+    #[test]
+    #[should_panic(expected:('KARAT: caller is not owner','ENTRYPOINT_FAILED'))]
+    fn test_admin_set_reserved_supply_not_owner() {
+        let sys: TestSystems = tester::setup_world(FLAGS::NONE);
+        tester::impersonate(OTHER());
+        sys.token.set_reserved_supply(0);
     }
 
 }

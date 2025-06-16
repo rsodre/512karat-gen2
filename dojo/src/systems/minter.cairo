@@ -103,6 +103,8 @@ pub mod minter {
                 (Option::Some("Minted out"))
             } else if (token_dispatcher.is_minting_paused()) {
                 (Option::Some("Paused"))
+            } else if (token_dispatcher.available_supply() == 0) {
+                (Option::Some("Unavailable"))
             } else if (is_presale && !token_config.is_eligible_for_presale(recipient)) {
                 (Option::Some("Ineligible"))
             } else if (is_presale && token_dispatcher.balance_of(recipient).is_non_zero()) {

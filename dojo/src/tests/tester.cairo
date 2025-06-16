@@ -130,6 +130,7 @@ pub mod tester {
         world.sync_perms_and_inits(contract_defs.span());
         world.dispatcher.grant_owner(dojo::utils::bytearray_hash(@"karat_gen2"), OWNER());
         world.dispatcher.grant_owner(selector_from_tag!("karat_gen2-minter"), OWNER());
+        world.dispatcher.grant_owner(selector_from_tag!("karat_gen2-token"), OWNER());
 
         impersonate(OWNER());
 
