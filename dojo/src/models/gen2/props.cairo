@@ -39,9 +39,11 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
     //
     fn generate_props(self: @Seed) -> Gen2Props {
         let palette: Palette = self._generate_palette();
-        let class: Class =
-            if (palette == Palette::Mono(0)) {Class::E(0)}
-            else {self._generate_class()};
+        let class: Class = match palette {
+            // The Mono palette is always Class::E(0 or 1)
+            Palette::Mono(_) => (Class::E((*self.token_id % 2).try_into().unwrap())),
+            _ => (self._generate_class())
+        };
         let realm_id: u128 = self._generate_realm_id();
         let mut attributes: Span<Attribute> = array![
             Attribute {
@@ -74,5 +76,49 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
             attributes,
         })
     }
+}
+
+
+
+
+//----------------------------
+// tests
+//
+#[cfg(test)]
+mod unit {
+    use super::{Gen2Props, Gen2PropsTrait};
+    use karat_gen2::models::seed::{Seed};
+    use karat_gen2::models::gen2::{palette::{Palette, PaletteTrait}};
+    use karat_gen2::models::gen2::class::{Class, ClassTrait};
+    use karat_gen2::tests::tester::tester::{OWNER};
+
+    fn _check_class(seed: Seed) {
+        let props: Gen2Props = seed.generate_props();
+        // println!("{} {} {}", seed.token_id, props.palette.style_name(), props.class.style_name());
+        match props.palette {
+            Palette::Mono(_) => {}, // OK!
+            _ => assert!(false, "wrong palette! {} {}", seed.token_id, props.palette.name()),
+        };
+        match props.class {
+            Class::E(style) => assert_le!(style, 1, "wrong class style! {} {}", seed.token_id, props.class.name()),
+            _ => assert!(false, "wrong class! {} {}", seed.token_id, props.class.name())
+        };
+    }
+
+    #[test]
+    fn test_mono_class() {
+        let mut seed_value: u256 = 12123123;
+        seed_value.high = 9;
+        let mut seed: Seed = Seed{
+            contract_address: OWNER(),
+            token_id: 0,
+            seed: seed_value.try_into().unwrap(),
+        };
+        while (seed.token_id < 10) {
+            _check_class(seed);
+            seed.token_id += 1;
+        }
+    }
+
 }
 
