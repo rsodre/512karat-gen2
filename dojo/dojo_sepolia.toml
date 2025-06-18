@@ -21,7 +21,7 @@ github = "https://github.com/rsodre"
 
 [env]
 chain_id = "SN_SEPOLIA"
-# rpc_url = "https://api.cartridge.gg/x/starknet/sepolia" # or env: STARKNET_RPC_URL
+rpc_url = "https://api.cartridge.gg/x/starknet/sepolia" # or env: STARKNET_RPC_URL
 # account_address = ""  # env: DOJO_ACCOUNT_ADDRESS
 # private_key = ""      # env: DOJO_PRIVATE_KEY
 world_address = "0x35383a8503443d1258cdf684a3b43999af6a170d833b5014057c434c75612f6"

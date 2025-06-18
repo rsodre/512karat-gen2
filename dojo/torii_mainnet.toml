@@ -13,7 +13,8 @@ historical = []
 [indexing]
 pending = true
 transactions = false
-# world_block = 722385    # Karat deployment block
+world_block = 722385    # Karat deployment block
 contracts = [
-  # "erc721:0x07d8ea58612a5de25f29281199a4fc1f2ce42f0f207f93c3a35280605f3b8e68", # 512karat
+  "erc721:0x07d8ea58612a5de25f29281199a4fc1f2ce42f0f207f93c3a35280605f3b8e68", # 512karat
+  "erc721:0x030f694df2a04e04cf3e1d3e79dd5aadfdaa77295bb007696222fc60a5e8730d", # 512karat-gen2
 ]

@@ -21,7 +21,7 @@ github = "https://github.com/rsodre"
 
 [env]
 chain_id = "SN_MAIN"
-# rpc_url = "https://api.cartridge.gg/x/starknet/mainnet" # or env: STARKNET_RPC_URL
+rpc_url = "https://api.cartridge.gg/x/starknet/mainnet" # or env: STARKNET_RPC_URL
 # account_address = ""  # env: DOJO_ACCOUNT_ADDRESS
 # private_key = ""      # env: DOJO_PRIVATE_KEY
 world_address = "0x35383a8503443d1258cdf684a3b43999af6a170d833b5014057c434c75612f6"
@@ -55,10 +55,10 @@ default = "karat_gen2"
 #
 [init_call_args]
 "karat_gen2-minter" = [
-  "0x015aF5935c1CBd913B069973aB162c364a03eB6e3Ea311d50a06A8C2bA060AC8", # treasury_address
+  "0x05730Fc9E88a6AB94F782E520812e272714D27221fBda848A56E903C57be6062", # treasury_address
   "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d", # strk_address
   "0x07d8ea58612a5de25f29281199a4fc1f2ce42f0f207f93c3a35280605f3b8e68", # karat_address
 ]
 "karat_gen2-token" = [
-  "0x015aF5935c1CBd913B069973aB162c364a03eB6e3Ea311d50a06A8C2bA060AC8", # treasury_address
+  "0x05730Fc9E88a6AB94F782E520812e272714D27221fBda848A56E903C57be6062", # treasury_address
 ]
