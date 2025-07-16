@@ -5,12 +5,14 @@ import fs from 'fs';
 dotenv.config();
 
 // constants
-import manifest from '../../client/src/dojo/generated/mainnet/manifest.json' with {type: "json"};
-const contractAddress = '0x07d8ea58612a5de25f29281199a4fc1f2ce42f0f207f93c3a35280605f3b8e68';
+import manifest from '../../dojo/manifest_mainnet.json' with {type: "json"};
 
-// Get abi from manifest
+// Get abi and contract address from manifest
 const abi = manifest.contracts.reduce((acc, c) => {
   return acc ?? (c.tag === 'karat_gen2-token' ? c.abi : null);
+}, null);
+const contractAddress = manifest.contracts.reduce((acc, c) => {
+  return acc ?? (c.tag === 'karat_gen2-token' ? c.address : null);
 }, null);
 
 // create provider + contract
