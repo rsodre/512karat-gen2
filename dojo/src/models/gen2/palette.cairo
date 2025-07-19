@@ -106,7 +106,7 @@ pub impl PaletteImpl of PaletteTrait {
     }
     fn _get_inks(self: @Palette) -> Array<ByteArray> {
         (match self {
-            Palette::Karat(_) => array!["#c2e0fd", "#FFE694", "#dddddd"],
+            Palette::Karat(_) => array!["#c2e0fd", "#C2FDE0", "#dddddd"],
             Palette::Graphite(_) => array!["#B47D40", "#D76017", "#dddddd"],
             Palette::Gold(_) => array!["#F6DFC0", "#b98b3d"],
             Palette::Cloak(_) => array!["#3DBAA5", "#b98b3d", "#dddddd"],
