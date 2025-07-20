@@ -31,10 +31,17 @@ The steps for Mainnet are exactly the same, just replace the chain name and ID w
 * You need a [Starknet RPC Provider](https://www.starknet.io/fullnodes-rpc-services/) to deploy contracts on-chain. After you get yours, check if it works and is on the chain you want to deploy (`SN_SEPOLIA` or `SN_MAIN`)
 
 ```sh
+# Install scarb
+curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh -s -- -v 2.10.1
+
 # get dojoup
 curl -L https://install.dojoengine.org | bash
 # install the correct dojo version
-dojoup install v1.5.0
+dojoup install v1.6.0
+dojoup component add sozo v1.6.0
+dojoup component add katana v1.6.3
+dojoup component add torii v1.5.9
+# dojoup component add torii v1.6.0-alpha.7
 ```
 
 After deployment, we can use some sozo commands to manage the contracts.
