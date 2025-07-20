@@ -17,7 +17,7 @@ pub struct Gen2Props {
 // Traits
 //
 use nft_combo::utils::renderer::{Attribute};
-use karat_gen2::models::seed::{Seed};
+use karat_gen2::models::seed::{Seed, Seeder, SeederTrait, RenderParams};
 
 #[generate_trait]
 pub impl Gen2PropsImpl of Gen2PropsTrait {
@@ -34,6 +34,30 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
         let seed: u256 = (*self.seed).into();
         ((seed.low % 8_000) + 1)
     }
+    fn _generate_matrix(self: @Seed) -> (ByteArray, ByteArray) {
+        // the matrix trait was added later, so it's a little hacky
+        // we generate RenderParams with ANY arguments, just to clone the renderer
+        // because we just need the last one, and it does not depend on the arguments
+        let mut seeder: Seeder = SeederTrait::new((*self.seed).into());
+        let p: RenderParams = seeder.get_render_params(20, 20, 20);
+        let matrix: ByteArray = (if (p.fade_type == 1) { 
+            ("Hollow") // inside-out
+        } else if (p.fade_type == 2) {
+            ("Karat") // inverted border
+        } else if (p.fade_type == 3 ) {
+            ("Horizon") // top/bottom v2
+        } else if (p.fade_type == 4 ) {
+            ("Crown") // top/bottom
+        } else if (p.fade_type == 5 ) {
+            ("Slit") // sides
+        } else {
+            ("Flat")
+        });
+        (
+            matrix,
+            format!("{}-{}", matrix, p.fade_amount),
+        )
+    }
     //
     // Gen2Props
     //
@@ -44,6 +68,7 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
             Palette::Mono(_) => (Class::E((*self.token_id % 2).try_into().unwrap())),
             _ => (self._generate_class())
         };
+        let (matrix, matrix_style): (ByteArray, ByteArray) = self._generate_matrix();
         let realm_id: u128 = self._generate_realm_id();
         let mut attributes: Span<Attribute> = array![
             Attribute {
@@ -61,6 +86,14 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
             Attribute {
                 key: "Palette Style",
                 value: palette.style_name(),
+            },
+            Attribute {
+                key: "Matrix",
+                value: matrix,
+            },
+            Attribute {
+                key: "Matrix Tier",
+                value: matrix_style,
             },
             Attribute {
                 key: "Realm",

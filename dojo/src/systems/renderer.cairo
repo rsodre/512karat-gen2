@@ -1,7 +1,7 @@
 use core::byte_array::ByteArrayTrait;
 use core::array::{Array, ArrayTrait};
 use karat_gen2::models::{
-    seed::{Seeder, SeederTrait},
+    seed::{Seeder, SeederTrait, RenderParams},
     gen2::{
         props::{Gen2Props},
         class::{ClassTrait},
@@ -113,17 +113,10 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
     //
     fn _make_cells(seed: u256, char_count: usize) -> Span<usize> {
         let mut seeder: Seeder = SeederTrait::new(seed);
-        // seed params
+        // generate render params
         let HALF_W: usize = (WIDTH / 2);
         let HALF_H: usize = (HEIGHT / 2);
-        let sc_x: usize = seeder.get_next(HALF_W);
-        let sc_y = sc_x * seeder.get_next(3);
-        let off_x: usize = seeder.get_next(HALF_W);
-        let off_y: usize = seeder.get_next(HALF_H);
-        let mod_x: usize = 1 + seeder.get_next(char_count);
-        let mod_y: usize = 1 + seeder.get_next(char_count);
-        let fade_type: usize = seeder.get_next(6);
-        let fade_amount: usize = 1 + seeder.get_next(4);
+        let p: RenderParams = seeder.get_render_params(char_count, HALF_W, HALF_H);
         // build cells
         let mut cells:Array<usize> = array![];
         let mut y: usize = 0;
@@ -139,22 +132,22 @@ pub impl Gen2RendererImpl of Gen2RendererTrait {
                 if (x < HALF_W) {
                     // generate LEFT
                     value = (
-                        (x * sc_x) + off_x + (x % mod_x) +
-                        (y * sc_y) + off_y + (y % mod_y)
+                        (x * p.sc_x) + p.off_x + (x % p.mod_x) +
+                        (y * p.sc_y) + p.off_y + (y % p.mod_y)
                     ) % char_count;
                     // fade out borders
                     let mut f: usize = 0;
-                    if (fade_type == 1 && (x + norm_y) > HALF_H) { // inside-out
+                    if (p.fade_type == 1 && (x + norm_y) > HALF_H) { // inside-out
                         let fy = SafeMathU32::sub(norm_y, HALF_H);
-                        f = ((x + fy) / fade_amount);
-                    } else if (fade_type == 2 && (x + norm_y) < HALF_H) { // inverted border
-                        f = ((x + norm_y) / fade_amount) * 2;
-                    } else if (fade_type == 3 ) { // top/bottom v2
-                        f = (SafeMathU32::sub(HALF_H, norm_y) / fade_amount);
-                    } else if (fade_type == 4 ) { // top/bottom
-                        f = (SafeMathU32::sub(norm_y, HALF_H) / fade_amount);
-                    } else if (fade_type == 5 ) { // sides
-                        f = (SafeMathU32::sub(HALF_W, norm_x) / fade_amount);
+                        f = ((x + fy) / p.fade_amount);
+                    } else if (p.fade_type == 2 && (x + norm_y) < HALF_H) { // inverted border
+                        f = ((x + norm_y) / p.fade_amount) * 2;
+                    } else if (p.fade_type == 3 ) { // top/bottom v2
+                        f = (SafeMathU32::sub(HALF_H, norm_y) / p.fade_amount);
+                    } else if (p.fade_type == 4 ) { // top/bottom
+                        f = (SafeMathU32::sub(norm_y, HALF_H) / p.fade_amount);
+                    } else if (p.fade_type == 5 ) { // sides
+                        f = (SafeMathU32::sub(HALF_W, norm_x) / p.fade_amount);
                     }
                     if (f > 0) {
                         value = SafeMathU32::sub(value, f);

@@ -29,6 +29,18 @@ pub struct Seeder {
     pub count: usize,
 }
 
+#[derive(Copy, Drop, Serde)]
+pub struct RenderParams {
+    pub sc_x: usize,
+    pub sc_y: usize,
+    pub off_x: usize,
+    pub off_y: usize,
+    pub mod_x: usize,
+    pub mod_y: usize,
+    pub fade_type: usize,
+    pub fade_amount: usize,
+}
+
 #[generate_trait]
 pub impl SeederImpl of SeederTrait {
     fn new(seed: u256) -> Seeder {
@@ -42,6 +54,26 @@ pub impl SeederImpl of SeederTrait {
         self.count += 1;
         self.seed /= 0x100;
         (result.try_into().unwrap())
+    }
+    fn get_render_params(ref self: Seeder, char_count: usize, HALF_W: usize, HALF_H: usize) -> RenderParams {
+        let sc_x: usize = self.get_next(HALF_W);
+        let sc_y = sc_x * self.get_next(3);
+        let off_x: usize = self.get_next(HALF_W);
+        let off_y: usize = self.get_next(HALF_H);
+        let mod_x: usize = 1 + self.get_next(char_count);
+        let mod_y: usize = 1 + self.get_next(char_count);
+        let fade_type: usize = self.get_next(6);
+        let fade_amount: usize = 1 + self.get_next(4);
+        (RenderParams {
+            sc_x,
+            sc_y,
+            off_x,
+            off_y,
+            mod_x,
+            mod_y,
+            fade_type,
+            fade_amount,
+        })
     }
 }
 

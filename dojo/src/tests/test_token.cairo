@@ -59,7 +59,7 @@ mod tests {
 _set_seed(ref sys, 1, 0x05ffb53ecb1afe4b91ff5d2365207ed973f916afae1ebfaf73a90aa56c6368cb);
         let uri: ByteArray = sys.token.token_uri(1);
         let uri_camel = sys.token.tokenURI(1);
-println!("___contract_uri(1):[{}]", uri);
+println!("___token_uri(1):[{}]", uri);
         assert_gt!(uri.len(), 0, "contract_uri() should not be empty");
         assert_eq!(uri, uri_camel, "contractURI() == contract_uri()");
         assert!(tester::starts_with(uri, "data:"), "contract_uri() should be a json string");
@@ -75,7 +75,7 @@ println!("___contract_uri(1):[{}]", uri);
         let sys: TestSystems = tester::setup_world(FLAGS::NONE);
         let uri: ByteArray = sys.token.contract_uri();
         let uri_camel = sys.token.contractURI();
-println!("___contract_uri(1):[{}]", uri);
+println!("___contract_uri():[{}]", uri);
         assert_ne!(uri, "", "contract_uri() should not be empty");
         assert_eq!(uri, uri_camel, "contractURI() == contract_uri()");
         assert!(tester::starts_with(uri, "data:"), "contract_uri() should be a json string");
