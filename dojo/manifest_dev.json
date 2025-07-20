@@ -1,9 +1,9 @@
 {
   "world": {
-    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-    "address": "0x35383a8503443d1258cdf684a3b43999af6a170d833b5014057c434c75612f6",
+    "class_hash": "0x685ed02eefa98fe7e208aa295042e9bbad8029b0d3d6f0ba2b32546efe0a1f9",
+    "address": "0x1d1bd26213a00202da9777edb35423f169d29452a2becfed2b3b6ea19c46b49",
     "seed": "karat-gen2",
-    "name": "Karat Vol 2",
+    "name": "Karat Gen 2",
     "entrypoints": [
       "uuid",
       "set_metadata",
@@ -1328,8 +1328,8 @@
   },
   "contracts": [
     {
-      "address": "0x1795a40c0b3838406a359fcc5ff9dc1cd90505a1da3b0b6f8a8b192da3a9966",
-      "class_hash": "0x13e2a85f5ea15a61e96d5624767c2e9d08ddf98133f4353dd3235bc6fd73ac3",
+      "address": "0x2bb01dd9d1bdd736a9189345d6212a39bb51417e50650131b0b025787f9dd36",
+      "class_hash": "0xb8d85bc00da0661a9f7b8bac085f22dd32b0b583b1c247fff8bc47e1f3ca4f",
       "abi": [
         {
           "type": "impl",
@@ -1422,6 +1422,20 @@
         },
         {
           "type": "enum",
+          "name": "core::option::Option::<core::integer::u64>",
+          "variants": [
+            {
+              "name": "Some",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "None",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "enum",
           "name": "core::bool",
           "variants": [
             {
@@ -1461,11 +1475,31 @@
                 {
                   "name": "token_contract_address",
                   "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "recipient",
+                  "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
               "outputs": [
                 {
                   "type": "core::option::Option::<core::byte_array::ByteArray>"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "get_presale_countdown",
+              "inputs": [
+                {
+                  "name": "token_contract_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::option::Option::<core::integer::u64>"
                 }
               ],
               "state_mutability": "view"
@@ -1669,8 +1703,8 @@
       ]
     },
     {
-      "address": "0x70ea289f608f37e2ee38e8a5a5e1cd9203e7666db36714d20382b73302308e5",
-      "class_hash": "0x2e95ebab66abfa46fcdbd13e53849c0d221e03b089e282c0f62402ead80e6a9",
+      "address": "0x7504c68e90f2b4c9abc3ac280f7f9eba2bf2e53af29965dca16c50faf0d2e6a",
+      "class_hash": "0x79340be47e73844f2beb9217695b7cda07ef339ae6cf6df5e2856d218598d65",
       "abi": [
         {
           "type": "impl",
@@ -1824,6 +1858,53 @@
                   "type": "core::bool"
                 }
               ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "set_reserved_supply",
+              "inputs": [
+                {
+                  "name": "reserved_supply",
+                  "type": "core::integer::u256"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "update_token_metadata",
+              "inputs": [
+                {
+                  "name": "token_id",
+                  "type": "core::integer::u256"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "update_tokens_metadata",
+              "inputs": [
+                {
+                  "name": "from_token_id",
+                  "type": "core::integer::u256"
+                },
+                {
+                  "name": "to_token_id",
+                  "type": "core::integer::u256"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "update_contract_metadata",
+              "inputs": [],
               "outputs": [],
               "state_mutability": "external"
             }
@@ -2258,6 +2339,39 @@
             },
             {
               "type": "function",
+              "name": "reserved_supply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "available_supply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "minted_supply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
               "name": "total_supply",
               "inputs": [],
               "outputs": [
@@ -2281,6 +2395,17 @@
             {
               "type": "function",
               "name": "is_minting_paused",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "is_minted_out",
               "inputs": [],
               "outputs": [
                 {
@@ -2328,6 +2453,39 @@
             {
               "type": "function",
               "name": "maxSupply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "reservedSupply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "availableSupply",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u256"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "mintedSupply",
               "inputs": [],
               "outputs": [
                 {
@@ -2695,6 +2853,10 @@
         "burn",
         "get_token_svg",
         "set_paused",
+        "set_reserved_supply",
+        "update_token_metadata",
+        "update_tokens_metadata",
+        "update_contract_metadata",
         "upgrade",
         "safe_transfer_from",
         "transfer_from",
