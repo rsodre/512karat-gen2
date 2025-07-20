@@ -1,6 +1,6 @@
 {
   "world": {
-    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+    "class_hash": "0x685ed02eefa98fe7e208aa295042e9bbad8029b0d3d6f0ba2b32546efe0a1f9",
     "address": "0x35383a8503443d1258cdf684a3b43999af6a170d833b5014057c434c75612f6",
     "seed": "karat-gen2",
     "name": "Karat Gen 2",
@@ -1329,7 +1329,7 @@
   "contracts": [
     {
       "address": "0x1795a40c0b3838406a359fcc5ff9dc1cd90505a1da3b0b6f8a8b192da3a9966",
-      "class_hash": "0x2b0f968fc6d2ab5279212a018273bcdbb0571de1767869b2577344e44724a57",
+      "class_hash": "0xb8d85bc00da0661a9f7b8bac085f22dd32b0b583b1c247fff8bc47e1f3ca4f",
       "abi": [
         {
           "type": "impl",
@@ -1704,7 +1704,7 @@
     },
     {
       "address": "0x70ea289f608f37e2ee38e8a5a5e1cd9203e7666db36714d20382b73302308e5",
-      "class_hash": "0x29181c2b8ac8be72f2ea45e121f6c00e6f20bcc026e008094868594629825f9",
+      "class_hash": "0x79340be47e73844f2beb9217695b7cda07ef339ae6cf6df5e2856d218598d65",
       "abi": [
         {
           "type": "impl",
