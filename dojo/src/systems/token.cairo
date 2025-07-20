@@ -287,7 +287,7 @@ pub mod token {
                 animation_url: Option::None,
                 youtube_url: Option::None,
                 attributes: Option::Some(token_props.attributes),
-                additional_metadata: Option::None,
+                additional_metadata: Option::Some(token_props.additional_metadata),
             };
             (Option::Some(metadata))
         }

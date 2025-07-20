@@ -190,6 +190,7 @@ mod unit {
             palette: PaletteTrait::randomize(seed.high),
             realm_id: token_id,
             attributes: [].span(),
+            additional_metadata: [].span(),
         })
     }
 

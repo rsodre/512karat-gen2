@@ -11,6 +11,7 @@ pub struct Gen2Props {
     pub palette: Palette,
     pub realm_id: u128,
     pub attributes: Span<Attribute>,
+    pub additional_metadata: Span<Attribute>,
 }
 
 //---------------------------------------
@@ -100,6 +101,12 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
                 value: format!("{}", realm_id),
             },
         ].span();
+        let mut additional_metadata: Span<Attribute> = array![
+            Attribute {
+                key: "Seed",
+                value: format!("{}", self.seed),
+            },
+        ].span();
         (Gen2Props{
             token_id: *self.token_id,
             seed: (*self.seed).into(),
@@ -107,6 +114,7 @@ pub impl Gen2PropsImpl of Gen2PropsTrait {
             palette,
             realm_id,
             attributes,
+            additional_metadata,
         })
     }
 }
